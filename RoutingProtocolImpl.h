@@ -43,13 +43,13 @@ class RoutingProtocolImpl : public RoutingProtocol {
  private:
     Node *sys; // To store Node object; used to access GSR9999 interfaces 
 	
-	struct pkt_detail{
+	typedef struct{
 		unsigned short packet_type;
 		unsigned short src_id;
 		unsigned short dest_id;
 		unsigned short size;
 		char* payload;
-	};
+	}pkt_detail;
 	
 	struct PortStatus{
 		int id;

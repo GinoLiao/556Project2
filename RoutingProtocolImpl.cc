@@ -67,7 +67,7 @@ void RoutingProtocolImpl::HndAlm_FrdChk(){}
 
 void RoutingProtocolImpl::recv(unsigned short port, void *packet, unsigned short size) {
   // add your own code
-  pkt_detail pkt = get_pkt_detail(*packet);
+  pkt_detail pkt = get_pkt_detail(packet);
   
   
   
