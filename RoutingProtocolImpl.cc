@@ -124,11 +124,11 @@ void RoutingProtocolImpl::recv(unsigned short port, void *packet, unsigned short
 }
 
 
-void RoutingProtocolImpl::send_data(unsigned short port, pkt_detail pkt, unsigned short size){}
-void RoutingProtocolImpl::send_pong(unsigned short port, pkt_detail pkt, unsigned short size){}
-void RoutingProtocolImpl::update_port_status(unsigned short port, pkt_detail pkt, unsigned short size){}
-void RoutingProtocolImpl::updt_DV_RtTbl(unsigned short port, pkt_detail pkt, unsigned short size){}
-void RoutingProtocolImpl::updt_LS_RtTbl(unsigned short port, pkt_detail pkt, unsigned short size){}
+  void RoutingProtocolImpl::send_data(unsigned short port, pkt_detail pkt, unsigned short size){}
+  void RoutingProtocolImpl::send_pong(unsigned short port, pkt_detail pkt, unsigned short size){}
+  void RoutingProtocolImpl::update_port_status(unsigned short port, pkt_detail pkt, unsigned short size){}
+  void RoutingProtocolImpl::updt_DV_RtTbl(unsigned short port, pkt_detail pkt, unsigned short size){}
+  void RoutingProtocolImpl::updt_LS_RtTbl(unsigned short port, pkt_detail pkt, unsigned short size){}
 
 
 
