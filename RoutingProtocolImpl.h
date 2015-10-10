@@ -34,9 +34,78 @@ class RoutingProtocolImpl : public RoutingProtocol {
     // special port number of SPECIAL_PORT (see global.h) to indicate
     // that the packet is generated locally and not received from 
     // a neighbor router.
+	
+
+	
+	
+
 
  private:
     Node *sys; // To store Node object; used to access GSR9999 interfaces 
+	
+	struct pkt_detail{
+		unsigned short packet_type;
+		unsigned short src_id;
+		unsigned short dest_id;
+		unsigned short size;
+		char* payload;
+	};
+	
+	struct PortStatus{
+		int id;
+		int timestamp;
+		int TxDelay;
+		struct PortStatus *next;
+	};
+
+	//now: DV only
+	struct RoutingTable_DV{
+		int id;
+		int Destination;	//destination id 
+		int NextHop;		//next hop id
+		int Distance;
+		int timestamp;
+		struct RoutingTable_DV *next;	
+	};
+	
+	//incomplete LS implementation
+	struct RoutingTable_LS{
+		struct RoutingTable_LS *next;    
+	};
+	
+	void InitPortStatus();
+	void InitRoutingTable();
+	void MakePortStatus();
+	void MakeForwardingTable();
+	void SetPortStatusAlarm();
+	void SetForwardingAlarm();
+	void SetPortCheckAlarm();
+	void SetForwardCheckAlarm();
+	void HndAlm_PrtStat();
+	void HndAlm_frd();
+	void HndAlm_PrtChk();
+	void HndAlm_FrdChk();
+	void send_data(unsigned short port, pkt_detail pkt, unsigned short size);
+	void send_pong(unsigned short port, pkt_detail pkt, unsigned short size);
+	void update_port_status(unsigned short port, pkt_detail pkt, unsigned short size);
+	void updt_DV_RtTbl(unsigned short port, pkt_detail pkt, unsigned short size);
+	void updt_LS_RtTbl(unsigned short port, pkt_detail pkt, unsigned short size);
+	pkt_detail get_pkt_detail(void *pkt);
+	
+	//Alarm type
+    enum eAlarmType {
+    	ALARM_PORT_STATUS,
+    	ALARM_FORWARDING,
+    	ALARM_PORT_CHECK,
+    	ALARM_FORWARD_CHECK
+    };
+    //Router ID
+    unsigned short RouterID;
+    //Protocol Type
+    eProtocolType ProtocolType;
+    //number of ports
+    unsigned short NumPorts;
+	  
 	
 };
 
