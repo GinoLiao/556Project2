@@ -34,7 +34,7 @@ void RoutingProtocolImpl::SetPortCheckAlarm(){}
 void RoutingProtocolImpl::SetForwardCheckAlarm(){}
 
 void RoutingProtocolImpl::handle_alarm(void *data) {
-    eAlarmType convertedData = (*eAlarmType)* data;
+    eAlarmType convertedData = *(eAlarmType*) data;
 
     if(convertedData==ALARM_PORT_STATUS){
         HndAlm_PrtStat();
