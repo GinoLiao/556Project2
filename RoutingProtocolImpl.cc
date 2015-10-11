@@ -6,6 +6,10 @@ RoutingProtocolImpl::RoutingProtocolImpl(Node *n) : RoutingProtocol(n) {
 
 }
 
+RoutingProtocolImpl::~RoutingProtocolImpl() {
+  // add your own code (if needed)
+}
+
 
 
 
@@ -59,7 +63,20 @@ void RoutingProtocolImpl::HndAlm_PrtChk(){}
 void RoutingProtocolImpl::HndAlm_FrdChk(){}
 
 
-
+  void RoutingProtocolImpl::send_data(unsigned short port, pkt_detail pkt, unsigned short size){}
+  void RoutingProtocolImpl::send_pong(unsigned short port, pkt_detail pkt, unsigned short size){}
+  void RoutingProtocolImpl::update_port_status(unsigned short port, pkt_detail pkt, unsigned short size){}
+  void RoutingProtocolImpl::updt_DV_RtTbl(unsigned short port, pkt_detail pkt, unsigned short size){}
+  void RoutingProtocolImpl::updt_LS_RtTbl(unsigned short port, pkt_detail pkt, unsigned short size){}
+  void RoutingProtocolImpl::get_pkt_detail(void *pkt, pkt_detail pkt_d){
+    pkt = NULL;
+    /*pkt->packet_type = get_pkt_type(*packet);
+    pkt->src_id = get_src_id(*packet);
+    pkt->dest_id = get_dest_id(*packet);
+    pkt->size = size;*/
+    //get payload
+    //return pkt;
+  }
 
 
 
@@ -94,20 +111,7 @@ void RoutingProtocolImpl::recv(unsigned short port, void *packet, unsigned short
 }
 
 
-  void RoutingProtocolImpl::send_data(unsigned short port, pkt_detail pkt, unsigned short size){}
-  void RoutingProtocolImpl::send_pong(unsigned short port, pkt_detail pkt, unsigned short size){}
-  void RoutingProtocolImpl::update_port_status(unsigned short port, pkt_detail pkt, unsigned short size){}
-  void RoutingProtocolImpl::updt_DV_RtTbl(unsigned short port, pkt_detail pkt, unsigned short size){}
-  void RoutingProtocolImpl::updt_LS_RtTbl(unsigned short port, pkt_detail pkt, unsigned short size){}
-  void RoutingProtocolImpl::get_pkt_detail(void *pkt, pkt_detail pkt_d){
-    pkt = NULL;
-    /*pkt->packet_type = get_pkt_type(*packet);
-    pkt->src_id = get_src_id(*packet);
-    pkt->dest_id = get_dest_id(*packet);
-    pkt->size = size;*/
-    //get payload
-    //return pkt;
-  }
+
 
 
 
