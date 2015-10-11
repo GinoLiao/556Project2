@@ -26,6 +26,7 @@ void RoutingProtocolImpl::init(unsigned short num_ports, unsigned short router_i
   SetForwardingAlarm();//every 30 sec
   SetPortCheckAlarm();//every 1 sec
   SetForwardCheckAlarm();//every 1 sec
+  
 }
   void RoutingProtocolImpl::InitPortStatus(){
     /*PktDetail test;
@@ -68,23 +69,22 @@ void RoutingProtocolImpl::handle_alarm(void *data) {
     //int currentTime = sys->time();
     int currentTime = 1000;
     
-    if(currentTime-portStatus.timestamp>15000){       //delete first element
-      PORT_STATUS deleteElt = portStatus;
-      portStatus =*(portStatus.next);
+    if(currentTime-portStatus->timestamp>15000){       //delete first element
+      PORT_STATUS *deleteElt = portStatus;
+      portStatus =portStatus->next;
       free(deleteElt);
     }
-    else{                                             //iterate through the list
-      if(portStatus.next==NULL){return;}
-      else{
-        PORT_STATUS lag = portStatus;
-        for (PORT_STATUS cur = portStatus.next;
-             cur.next != NULL;
-             cur=cur.next){
-              if(currentTime-cur.timestamp>15000){
-                lag.next=cur.next;
-                free(cur);
-              }
-        }
+                                            //iterate through the list
+    if(portStatus->next==NULL){return;}
+    else{
+      PORT_STATUS *lag = portStatus;
+      for (PORT_STATUS *cur = portStatus->next;
+           cur->next != NULL;
+           cur=cur->next){
+            if(currentTime-cur->timestamp>15000){
+              lag->next=cur->next;
+              free(cur);
+            }
       }
     }
     
