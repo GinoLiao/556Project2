@@ -3,7 +3,6 @@
 RoutingProtocolImpl::RoutingProtocolImpl(Node *n) : RoutingProtocol(n) {
   sys = n;
   // add your own code
-    
 
 }
 
@@ -100,7 +99,7 @@ void RoutingProtocolImpl::recv(unsigned short port, void *packet, unsigned short
   void RoutingProtocolImpl::updt_DV_RtTbl(unsigned short port, pkt_detail pkt, unsigned short size){}
   void RoutingProtocolImpl::updt_LS_RtTbl(unsigned short port, pkt_detail pkt, unsigned short size){}
   pkt_detail RoutingProtocolImpl::get_pkt_detail(void *pkt){
-    struct pkt_detail pkt = NULL;
+    pkt_detail pkt = NULL;
     /*pkt->packet_type = get_pkt_type(*packet);
     pkt->src_id = get_src_id(*packet);
     pkt->dest_id = get_dest_id(*packet);

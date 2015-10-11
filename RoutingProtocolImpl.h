@@ -43,13 +43,15 @@ class RoutingProtocolImpl : public RoutingProtocol {
  private:
     Node *sys; // To store Node object; used to access GSR9999 interfaces 
 	
-	typedef struct{
+	struct pkt_detail_impl{
 		unsigned short packet_type;
 		unsigned short src_id;
 		unsigned short dest_id;
 		unsigned short size;
 		char* payload;
-	}pkt_detail;
+	};
+
+	typedef struct pkt_detail_impl pkt_detail;
 	
 	struct PortStatus{
 		int id;
@@ -90,7 +92,7 @@ class RoutingProtocolImpl : public RoutingProtocol {
 	void update_port_status(unsigned short port, pkt_detail pkt, unsigned short size);
 	void updt_DV_RtTbl(unsigned short port, pkt_detail pkt, unsigned short size);
 	void updt_LS_RtTbl(unsigned short port, pkt_detail pkt, unsigned short size);
-	pkt_detail get_pkt_detail(void *pkt);
+	struct pkt_detail get_pkt_detail(void *pkt);
 	
 	//Alarm type
     enum eAlarmType {
