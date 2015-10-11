@@ -19,9 +19,9 @@ void RoutingProtocolImpl::init(unsigned short num_ports, unsigned short router_i
   NumPorts=num_ports;
   RouterID = router_id;
   ProtocolType=protocol_type;
-  InitPortStatus();
+  InitPortStatus(NumPorts,RouterID);
   InitRoutingTable();
-  MakePortStatus();
+  MakePortStatus(NumPorts,RouterID);
   MakeForwardingTable();
   SetPortStatusAlarm();//every 10 sec
   SetForwardingAlarm();//every 30 sec
