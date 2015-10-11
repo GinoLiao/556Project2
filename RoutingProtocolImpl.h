@@ -93,9 +93,9 @@ class RoutingProtocolImpl : public RoutingProtocol {
         VARIABLE DEFINITIONS
     */
       Node *sys; // To store Node object; used to access GSR9999 interfaces
-      PORT_STATUS portStatus;
-      ROUT_TBL_DV routTblDV;
-      ROUT_TBL_LS routTblLS;
+      PORT_STATUS *portStatus;
+      ROUT_TBL_DV *routTblDV;
+      ROUT_TBL_LS *routTblLS;
       //Router ID
       unsigned short RouterID;
       //Protocol Type

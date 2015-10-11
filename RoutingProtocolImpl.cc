@@ -64,7 +64,31 @@ void RoutingProtocolImpl::handle_alarm(void *data) {
 
   void RoutingProtocolImpl::HndAlm_PrtStat(){}
   void RoutingProtocolImpl::HndAlm_frd(){}
-  void RoutingProtocolImpl::HndAlm_PrtChk(){}
+  void RoutingProtocolImpl::HndAlm_PrtChk(){
+    //int currentTime = sys->time();
+    int currentTime = 1000;
+    
+    if(currentTime-portStatus.timestamp>15000){       //delete first element
+      PORT_STATUS deleteElt = portStatus;
+      portStatus =*(portStatus.next);
+      free(deleteElt);
+    }
+    else{                                             //iterate through the list
+      if(portStatus.next==NULL){return;}
+      else{
+        PORT_STATUS lag = portStatus;
+        for (PORT_STATUS cur = portStatus.next;
+             cur.next != NULL;
+             cur=cur.next){
+              if(currentTime-cur.timestamp>15000){
+                lag.next=cur.next;
+                free(cur);
+              }
+        }
+      }
+    }
+    
+  }
   void RoutingProtocolImpl::HndAlm_FrdChk(){}
 
 
