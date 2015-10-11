@@ -34,6 +34,15 @@ class RoutingProtocolImpl : public RoutingProtocol {
     // special port number of SPECIAL_PORT (see global.h) to indicate
     // that the packet is generated locally and not received from 
     // a neighbor router.
+    struct pkt_detail_impl{
+		unsigned short packet_type;
+		unsigned short src_id;
+		unsigned short dest_id;
+		unsigned short size;
+		char* payload;
+	};
+
+	typedef struct pkt_detail_impl pkt_detail;
 	
 
 	
@@ -43,15 +52,7 @@ class RoutingProtocolImpl : public RoutingProtocol {
  private:
     Node *sys; // To store Node object; used to access GSR9999 interfaces 
 	
-	struct pkt_detail_impl{
-		unsigned short packet_type;
-		unsigned short src_id;
-		unsigned short dest_id;
-		unsigned short size;
-		char* payload;
-	};
-
-	typedef struct pkt_detail_impl pkt_detail;
+	
 	
 	struct PortStatus{
 		int id;
@@ -92,7 +93,7 @@ class RoutingProtocolImpl : public RoutingProtocol {
 	void update_port_status(unsigned short port, pkt_detail pkt, unsigned short size);
 	void updt_DV_RtTbl(unsigned short port, pkt_detail pkt, unsigned short size);
 	void updt_LS_RtTbl(unsigned short port, pkt_detail pkt, unsigned short size);
-	pkt_detail get_pkt_detail(void *pkt);
+	void get_pkt_detail(void *pkt, pkt_detail);
 	
 	//Alarm type
     enum eAlarmType {
