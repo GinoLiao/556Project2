@@ -66,7 +66,8 @@ void RoutingProtocolImpl::HndAlm_FrdChk(){}
 
 void RoutingProtocolImpl::recv(unsigned short port, void *packet, unsigned short size) {
   // add your own code
-  pkt_detail pkt = get_pkt_detail(packet);
+  pkt_detail pkt;
+  get_pkt_detail(packet, pkt);
   
   
   
@@ -98,14 +99,14 @@ void RoutingProtocolImpl::recv(unsigned short port, void *packet, unsigned short
   void RoutingProtocolImpl::update_port_status(unsigned short port, pkt_detail pkt, unsigned short size){}
   void RoutingProtocolImpl::updt_DV_RtTbl(unsigned short port, pkt_detail pkt, unsigned short size){}
   void RoutingProtocolImpl::updt_LS_RtTbl(unsigned short port, pkt_detail pkt, unsigned short size){}
-  pkt_detail_impl RoutingProtocolImpl::get_pkt_detail(void *pkt){
-    pkt_detail pkt = NULL;
+  void RoutingProtocolImpl::get_pkt_detail(void *pkt, pkt_detail pkt_d){
+    pkt = NULL;
     /*pkt->packet_type = get_pkt_type(*packet);
     pkt->src_id = get_src_id(*packet);
     pkt->dest_id = get_dest_id(*packet);
     pkt->size = size;*/
     //get payload
-    return pkt;
+    //return pkt;
   }
 
 
