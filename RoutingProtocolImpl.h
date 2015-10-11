@@ -35,81 +35,104 @@ class RoutingProtocolImpl : public RoutingProtocol {
     // that the packet is generated locally and not received from 
     // a neighbor router.
     struct pkt_detail_impl{
-		unsigned short packet_type;
-		unsigned short src_id;
-		unsigned short dest_id;
-		unsigned short size;
-		char* payload;
-	};
+        unsigned short packet_type;
+        unsigned short src_id;
+        unsigned short dest_id;
+        unsigned short size;
+        char* payload;
+    };
 
-	typedef struct pkt_detail_impl pkt_detail;
-	
+    typedef struct pkt_detail_impl PktDetail;
+    
 
-	
-	
+    
+    
 
 
  private:
-    Node *sys; // To store Node object; used to access GSR9999 interfaces 
-	
-	
-	
-	struct PortStatus{
-		int id;
-		int timestamp;
-		int TxDelay;
-		struct PortStatus *next;
-	};
+    /*
+        TYPE DEFINITIONS
+    */
+        struct PortStatus{
+          int id;
+          int timestamp;
+          int TxDelay;
+          struct PortStatus *next;
+        };
+        typedef struct PortStatus PORT_STATUS;
 
-	//now: DV only
-	struct RoutingTable_DV{
-		int id;
-		int Destination;	//destination id 
-		int NextHop;		//next hop id
-		int Distance;
-		int timestamp;
-		struct RoutingTable_DV *next;	
-	};
-	
-	//incomplete LS implementation
-	struct RoutingTable_LS{
-		struct RoutingTable_LS *next;    
-	};
-	
-	void InitPortStatus();
-	void InitRoutingTable();
-	void MakePortStatus();
-	void MakeForwardingTable();
-	void SetPortStatusAlarm();
-	void SetForwardingAlarm();
-	void SetPortCheckAlarm();
-	void SetForwardCheckAlarm();
-	void HndAlm_PrtStat();
-	void HndAlm_frd();
-	void HndAlm_PrtChk();
-	void HndAlm_FrdChk();
-	void send_data(unsigned short port, pkt_detail pkt, unsigned short size);
-	void send_pong(unsigned short port, pkt_detail pkt, unsigned short size);
-	void update_port_status(unsigned short port, pkt_detail pkt, unsigned short size);
-	void updt_DV_RtTbl(unsigned short port, pkt_detail pkt, unsigned short size);
-	void updt_LS_RtTbl(unsigned short port, pkt_detail pkt, unsigned short size);
-	void get_pkt_detail(void *pkt, pkt_detail);
-	
-	//Alarm type
-    enum eAlarmType {
-    	ALARM_PORT_STATUS,
-    	ALARM_FORWARDING,
-    	ALARM_PORT_CHECK,
-    	ALARM_FORWARD_CHECK
-    };
-    //Router ID
-    unsigned short RouterID;
-    //Protocol Type
-    eProtocolType ProtocolType;
-    //number of ports
-    unsigned short NumPorts;
-	  
-	
+        //now: DV only
+        struct RoutingTable_DV{
+          int id;
+          int Destination;  //destination id 
+          int NextHop;      //next hop id
+          int Distance;
+          int timestamp;
+          struct RoutingTable_DV *next; 
+        };
+
+        typedef struct RoutingTable_DV ROUT_TBL_DV;
+
+
+        //incomplete LS implementation
+        struct RoutingTable_LS{
+          struct RoutingTable_LS *next;    
+        };
+
+        typedef struct RoutingTable_LS ROUT_TBL_LS;
+            //Alarm type
+        enum eAlarmType {
+          ALARM_PORT_STATUS,
+          ALARM_FORWARDING,
+          ALARM_PORT_CHECK,
+          ALARM_FORWARD_CHECK
+        };
+
+  
+    /*
+        VARIABLE DEFINITIONS
+    */
+      Node *sys; // To store Node object; used to access GSR9999 interfaces
+      PORT_STATUS portStatus;
+      ROUT_TBL_DV routTblDV;
+      ROUT_TBL_LS routTblLS;
+      //Router ID
+      unsigned short RouterID;
+      //Protocol Type
+      eProtocolType ProtocolType;
+      //number of ports
+      unsigned short NumPorts;
+    
+    
+    
+    
+
+    /*
+    Function definitions
+    */
+      void InitPortStatus();
+      void InitRoutingTable();
+      void MakePortStatus();
+      void MakeForwardingTable();
+      void SetPortStatusAlarm();
+      void SetForwardingAlarm();
+      void SetPortCheckAlarm();
+      void SetForwardCheckAlarm();
+      void HndAlm_PrtStat();
+      void HndAlm_frd();
+      void HndAlm_PrtChk();
+      void HndAlm_FrdChk();
+      void send_data(unsigned short port, PktDetail pkt, unsigned short size);
+      void send_pong(unsigned short port, PktDetail pkt, unsigned short size);
+      void update_port_status(unsigned short port, PktDetail pkt, unsigned short size);
+      void updt_DV_RtTbl(unsigned short port, PktDetail pkt, unsigned short size);
+      void updt_LS_RtTbl(unsigned short port, PktDetail pkt, unsigned short size);
+      void get_pkt_detail(void *pkt, PktDetail);
+
+
+    
+      
+    
 };
 
 #endif

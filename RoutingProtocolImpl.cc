@@ -28,9 +28,10 @@ void RoutingProtocolImpl::init(unsigned short num_ports, unsigned short router_i
   SetForwardCheckAlarm();//every 1 sec
 }
   void RoutingProtocolImpl::InitPortStatus(){
-    /*pkt_detail test;
+    /*PktDetail test;
     test.packet_type=1;
     printf ("test.packet_type:%d\n", test.packet_type);*/
+    
   }
   void RoutingProtocolImpl::InitRoutingTable(){}
   void RoutingProtocolImpl::MakePortStatus(){}
@@ -67,12 +68,12 @@ void RoutingProtocolImpl::handle_alarm(void *data) {
   void RoutingProtocolImpl::HndAlm_FrdChk(){}
 
 
-  void RoutingProtocolImpl::send_data(unsigned short port, pkt_detail pkt, unsigned short size){}
-  void RoutingProtocolImpl::send_pong(unsigned short port, pkt_detail pkt, unsigned short size){}
-  void RoutingProtocolImpl::update_port_status(unsigned short port, pkt_detail pkt, unsigned short size){}
-  void RoutingProtocolImpl::updt_DV_RtTbl(unsigned short port, pkt_detail pkt, unsigned short size){}
-  void RoutingProtocolImpl::updt_LS_RtTbl(unsigned short port, pkt_detail pkt, unsigned short size){}
-  void RoutingProtocolImpl::get_pkt_detail(void *pkt, pkt_detail pkt_d){
+  void RoutingProtocolImpl::send_data(unsigned short port, PktDetail pkt, unsigned short size){}
+  void RoutingProtocolImpl::send_pong(unsigned short port, PktDetail pkt, unsigned short size){}
+  void RoutingProtocolImpl::update_port_status(unsigned short port, PktDetail pkt, unsigned short size){}
+  void RoutingProtocolImpl::updt_DV_RtTbl(unsigned short port, PktDetail pkt, unsigned short size){}
+  void RoutingProtocolImpl::updt_LS_RtTbl(unsigned short port, PktDetail pkt, unsigned short size){}
+  void RoutingProtocolImpl::get_pkt_detail(void *pkt, PktDetail pkt_d){
     pkt = NULL;
     /*pkt->packet_type = get_pkt_type(*packet);
     pkt->src_id = get_src_id(*packet);
@@ -87,7 +88,7 @@ void RoutingProtocolImpl::handle_alarm(void *data) {
 
 void RoutingProtocolImpl::recv(unsigned short port, void *packet, unsigned short size) {
   // add your own code
-  pkt_detail pkt;
+  PktDetail pkt;
   get_pkt_detail(packet, pkt);
   
   
