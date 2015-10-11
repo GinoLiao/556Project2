@@ -27,14 +27,18 @@ void RoutingProtocolImpl::init(unsigned short num_ports, unsigned short router_i
   SetPortCheckAlarm();//every 1 sec
   SetForwardCheckAlarm();//every 1 sec
 }
-void RoutingProtocolImpl::InitPortStatus(){}
-void RoutingProtocolImpl::InitRoutingTable(){}
-void RoutingProtocolImpl::MakePortStatus(){}
-void RoutingProtocolImpl::MakeForwardingTable(){}
-void RoutingProtocolImpl::SetPortStatusAlarm(){}
-void RoutingProtocolImpl::SetForwardingAlarm(){}
-void RoutingProtocolImpl::SetPortCheckAlarm(){}
-void RoutingProtocolImpl::SetForwardCheckAlarm(){}
+  void RoutingProtocolImpl::InitPortStatus(){
+    /*pkt_detail test;
+    test.packet_type=1;
+    printf ("test.packet_type:%d\n", test.packet_type);*/
+  }
+  void RoutingProtocolImpl::InitRoutingTable(){}
+  void RoutingProtocolImpl::MakePortStatus(){}
+  void RoutingProtocolImpl::MakeForwardingTable(){}
+  void RoutingProtocolImpl::SetPortStatusAlarm(){}
+  void RoutingProtocolImpl::SetForwardingAlarm(){}
+  void RoutingProtocolImpl::SetPortCheckAlarm(){}
+  void RoutingProtocolImpl::SetForwardCheckAlarm(){}
 
 void RoutingProtocolImpl::handle_alarm(void *data) {
     eAlarmType convertedData = *(eAlarmType*) data;
@@ -57,10 +61,10 @@ void RoutingProtocolImpl::handle_alarm(void *data) {
 
     }
 
-void RoutingProtocolImpl::HndAlm_PrtStat(){}
-void RoutingProtocolImpl::HndAlm_frd(){}
-void RoutingProtocolImpl::HndAlm_PrtChk(){}
-void RoutingProtocolImpl::HndAlm_FrdChk(){}
+  void RoutingProtocolImpl::HndAlm_PrtStat(){}
+  void RoutingProtocolImpl::HndAlm_frd(){}
+  void RoutingProtocolImpl::HndAlm_PrtChk(){}
+  void RoutingProtocolImpl::HndAlm_FrdChk(){}
 
 
   void RoutingProtocolImpl::send_data(unsigned short port, pkt_detail pkt, unsigned short size){}
