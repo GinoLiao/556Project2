@@ -110,9 +110,9 @@ class RoutingProtocolImpl : public RoutingProtocol {
     /*
     Function definitions
     */
-      void InitPortStatus();
+      void InitPortStatus(unsigned short num_ports, unsigned short router_id);
       void InitRoutingTable();
-      void MakePortStatus();
+      void MakePortStatus(unsigned short num_ports, unsigned short router_id);
       void MakeForwardingTable();
       void SetPortStatusAlarm();
       void SetForwardingAlarm();

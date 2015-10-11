@@ -29,14 +29,57 @@ void RoutingProtocolImpl::init(unsigned short num_ports, unsigned short router_i
   SetForwardCheckAlarm();//every 1 sec
 
 }
-  void RoutingProtocolImpl::InitPortStatus(){
+
+  void RoutingProtocolImpl::InitPortStatus(unsigned short num_ports, unsigned short router_id){
     /*PktDetail test;
     test.packet_type=1;
     printf ("test.packet_type:%d\n", test.packet_type);*/
+    //loop over all other nodes, initialize port status 
+    PORT_STATUS *cur = portStatus;
+    for(unsigned short i=1; i <= num_ports;i++){
+      if(i != router_id){	//if different port, put it to port status
+      	cur->id = i;
+        cur->timestamp = sys->time();
+        cur->TxDelay = INFINITY_COST;	//set to inifinity
+        cur = cur->next;
+      }
+    }
     
   }
+  
   void RoutingProtocolImpl::InitRoutingTable(){}
-  void RoutingProtocolImpl::MakePortStatus(){}
+  /*
+  	send ping to update port status with neighbors' delays
+  */
+  void RoutingProtocolImpl::MakePortStatus(unsigned short num_ports, unsigned short router_id){
+    for(unsigned short i=1;i<num_ports;i++){
+      if(i != router_id){
+/*        //make ping packet
+        ping_pkt = (char *) malloc(65536);
+        ping_pkt[strlen(ping_pkt)-1] = 0;	//set its end
+          //set packet type
+        ePcketType PingPktType = PING;
+        memcpy(&ping_pkt[0],&PingPktType,8);	
+          //set size
+
+        unsigned short PingPktSizeNet = 65536;
+        memcpy(&ping_pkt[16],&PingPktSizeNet,16);
+          //set srouce ID
+        memcpy(&ping_pkt[32],&router_id,16);
+        	//set destination IF
+        memcpy(&ping_pkt[48],&i,16);
+        	//set payload to time
+        memcpy(&ping_pkt[48],&sys->time(),16);
+        //send to all other ports to find neighbor
+        sys->send(i, ping_pkt, PingPktSizeNet);
+		*/
+		//void *alarm_type;
+		eAlarmType alarm_type = ALARM_PORT_STATUS;
+		//memcpy(&alarm_type, &ALARM_PORT_STATUS, 16);
+		handle_alarm((void *)alarm_type);
+      }
+    }
+  }
   void RoutingProtocolImpl::MakeForwardingTable(){}
   void RoutingProtocolImpl::SetPortStatusAlarm(){}
   void RoutingProtocolImpl::SetForwardingAlarm(){}
