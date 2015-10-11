@@ -1,4 +1,5 @@
 #include "RoutingProtocolImpl.h"
+#include "Node.h"
 
 RoutingProtocolImpl::RoutingProtocolImpl(Node *n) : RoutingProtocol(n) {
   sys = n;
@@ -26,7 +27,7 @@ void RoutingProtocolImpl::init(unsigned short num_ports, unsigned short router_i
   SetForwardingAlarm();//every 30 sec
   SetPortCheckAlarm();//every 1 sec
   SetForwardCheckAlarm();//every 1 sec
-  
+
 }
   void RoutingProtocolImpl::InitPortStatus(){
     /*PktDetail test;
@@ -66,8 +67,8 @@ void RoutingProtocolImpl::handle_alarm(void *data) {
   void RoutingProtocolImpl::HndAlm_PrtStat(){}
   void RoutingProtocolImpl::HndAlm_frd(){}
   void RoutingProtocolImpl::HndAlm_PrtChk(){
-    //int currentTime = sys->time();
-    int currentTime = 1000;
+    int currentTime = sys->time();
+    //int currentTime = 1000;
     
     if(currentTime-portStatus->timestamp>15000){       //delete first element
       PORT_STATUS *deleteElt = portStatus;
