@@ -92,7 +92,7 @@ class RoutingProtocolImpl : public RoutingProtocol {
 	void update_port_status(unsigned short port, pkt_detail pkt, unsigned short size);
 	void updt_DV_RtTbl(unsigned short port, pkt_detail pkt, unsigned short size);
 	void updt_LS_RtTbl(unsigned short port, pkt_detail pkt, unsigned short size);
-	struct pkt_detail get_pkt_detail(void *pkt);
+	pkt_detail get_pkt_detail(void *pkt);
 	
 	//Alarm type
     enum eAlarmType {
