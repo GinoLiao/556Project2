@@ -127,7 +127,7 @@ class RoutingProtocolImpl : public RoutingProtocol {
       void update_port_status(unsigned short port, PktDetail *pkt, unsigned short size);
       void updt_DV_RtTbl(unsigned short port, PktDetail *pkt, unsigned short size);
       void updt_LS_RtTbl(unsigned short port, PktDetail *pkt, unsigned short size);
-      void get_pkt_detail(void *pkt, PktDetail *pkt_d);
+      void get_pkt_detail(void *pkt, PktDetail *pkt_d, unsigned short size);
 
 
     
