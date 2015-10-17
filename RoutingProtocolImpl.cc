@@ -1,5 +1,7 @@
 #include "RoutingProtocolImpl.h"
 #include "Node.h"
+#include "global.h"
+#include <string.h>
 
 RoutingProtocolImpl::RoutingProtocolImpl(Node *n) : RoutingProtocol(n) {
   sys = n;
@@ -23,9 +25,17 @@ void RoutingProtocolImpl::init(unsigned short num_ports, unsigned short router_i
   InitRoutingTable();
   MakePortStatus(NumPorts,RouterID);
   MakeForwardingTable();
-  SetPortStatusAlarm();//every 10 sec
+  
+  eAlarmType port_status_alarm_type = ALARM_PORT_STATUS;
+  (void) port_status_alarm_type;
+  SetPortStatusAlarm(this, 10000, &port_status_alarm_type);//every 10 sec
+  
   SetForwardingAlarm();//every 30 sec
-  SetPortCheckAlarm();//every 1 sec
+  
+  eAlarmType port_check_alarm_type = ALARM_PORT_CHECK;
+  (void) port_check_alarm_type;
+  SetPortCheckAlarm(this, 1000, &port_check_alarm_type);//every 1 sec
+  
   SetForwardCheckAlarm();//every 1 sec
 
 }
@@ -52,13 +62,13 @@ void RoutingProtocolImpl::init(unsigned short num_ports, unsigned short router_i
   	send ping to update port status with neighbors' delays
   */
   void RoutingProtocolImpl::MakePortStatus(unsigned short num_ports, unsigned short router_id){
-    for(unsigned short i=1;i<num_ports;i++){
+  /*  for(unsigned short i=1;i<num_ports;i++){
       if(i != router_id){
-/*        //make ping packet
+        //make ping packet
         ping_pkt = (char *) malloc(65536);
         ping_pkt[strlen(ping_pkt)-1] = 0;	//set its end
           //set packet type
-        ePcketType PingPktType = PING;
+        ePacketType PingPktType = PING;
         memcpy(&ping_pkt[0],&PingPktType,8);	
           //set size
 
@@ -72,25 +82,30 @@ void RoutingProtocolImpl::init(unsigned short num_ports, unsigned short router_i
         memcpy(&ping_pkt[48],&sys->time(),16);
         //send to all other ports to find neighbor
         sys->send(i, ping_pkt, PingPktSizeNet);
-		*/
+	  }
+  }*/
 		//void *alarm_type;
 		eAlarmType alarm_type = ALARM_PORT_STATUS;
 		//memcpy(&alarm_type, &ALARM_PORT_STATUS, 16);
 		handle_alarm((void *)alarm_type);
       }
-    }
-  }
+
   void RoutingProtocolImpl::MakeForwardingTable(){}
-  void RoutingProtocolImpl::SetPortStatusAlarm(){}
+  void RoutingProtocolImpl::SetPortStatusAlarm(RoutingProtocol *r, unsigned int duration, void *data){
+	sys->set_alarm(r, duration, data);
+	  
+  }
   void RoutingProtocolImpl::SetForwardingAlarm(){}
-  void RoutingProtocolImpl::SetPortCheckAlarm(){}
+  void RoutingProtocolImpl::SetPortCheckAlarm(RoutingProtocol *r, unsigned int duration, void *data){
+	sys->set_alarm(r, duration, data);  
+  }
   void RoutingProtocolImpl::SetForwardCheckAlarm(){}
 
 void RoutingProtocolImpl::handle_alarm(void *data) {
     eAlarmType convertedData = *(eAlarmType*) data;
 
     if(convertedData==ALARM_PORT_STATUS){
-        HndAlm_PrtStat();
+        HndAlm_PrtStat(NumPorts, RouterID);
     }
     else if(convertedData == ALARM_FORWARDING){
         HndAlm_frd(); 
@@ -107,7 +122,31 @@ void RoutingProtocolImpl::handle_alarm(void *data) {
 
     }
 
-  void RoutingProtocolImpl::HndAlm_PrtStat(){}
+  void RoutingProtocolImpl::HndAlm_PrtStat(unsigned short num_ports, unsigned short router_id){
+	for(unsigned short i=1;i<num_ports;i++){
+		if(i != router_id){	
+	//make ping packet
+		char *ping_pkt;
+        ping_pkt = (char *) malloc(65536);
+        ping_pkt[strlen(ping_pkt)-1] = 0;	//set its end
+          //set packet type
+        ePacketType PingPktType = PING;
+        memcpy(&ping_pkt[0],&PingPktType,8);	
+          //set size
+
+        unsigned short PingPktSizeNet = 65535;
+        memcpy(&ping_pkt[16],&PingPktSizeNet,16);
+          //set srouce ID
+        memcpy(&ping_pkt[32],&router_id,16);
+        	//destination ID unused in PING packet
+        	//set payload to time
+		unsigned int time = sys->time();
+        memcpy(&ping_pkt[64],&time,32);
+        //send to all other ports to find neighbor
+        sys->send(i, ping_pkt, PingPktSizeNet);
+		}
+	}
+  }
   void RoutingProtocolImpl::HndAlm_frd(){}
   void RoutingProtocolImpl::HndAlm_PrtChk(){
     int currentTime = sys->time();

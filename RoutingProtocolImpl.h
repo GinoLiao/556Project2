@@ -114,11 +114,11 @@ class RoutingProtocolImpl : public RoutingProtocol {
       void InitRoutingTable();
       void MakePortStatus(unsigned short num_ports, unsigned short router_id);
       void MakeForwardingTable();
-      void SetPortStatusAlarm();
+      void SetPortStatusAlarm(RoutingProtocol *r, unsigned int duration, void *data);
       void SetForwardingAlarm();
-      void SetPortCheckAlarm();
+      void SetPortCheckAlarm(RoutingProtocol *r, unsigned int duration, void *data);
       void SetForwardCheckAlarm();
-      void HndAlm_PrtStat();
+      void HndAlm_PrtStat(unsigned short num_ports, unsigned short router_id);
       void HndAlm_frd();
       void HndAlm_PrtChk();
       void HndAlm_FrdChk();
