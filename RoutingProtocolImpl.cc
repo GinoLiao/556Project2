@@ -1,7 +1,16 @@
 #include "RoutingProtocolImpl.h"
 #include "Node.h"
 #include "global.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <sys/time.h>
 
 RoutingProtocolImpl::RoutingProtocolImpl(Node *n) : RoutingProtocol(n) {
   sys = n;
@@ -194,8 +203,8 @@ void RoutingProtocolImpl::handle_alarm(void *data) {
   void RoutingProtocolImpl::updt_DV_RtTbl(unsigned short port, PktDetail *pkt, unsigned short size){}
   void RoutingProtocolImpl::updt_LS_RtTbl(unsigned short port, PktDetail *pkt, unsigned short size){}
 	void RoutingProtocolImpl::get_pkt_detail(void *pkt, PktDetail *pkt_d, unsigned short size){
-	  char *pkt_copy;
-    pkt_copy = (char *) malloc(size);
+	char *pkt_copy={0};
+    //pkt_copy = (char *) malloc(size);
 	*pkt_copy = *(char*) pkt;
     memcpy(&pkt_d->packet_type,&pkt_copy[0],1);//packetType
     //memcpy(&size,&pkt_copy[2],2);
