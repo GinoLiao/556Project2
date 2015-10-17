@@ -196,7 +196,7 @@ void RoutingProtocolImpl::handle_alarm(void *data) {
     pkt_copy = (char *) malloc(size);
 	*pkt_copy = *(char*) pkt;
     memcpy(&pkt_d->packet_type,&pkt_copy[0],1);//packetType
-    memcpy(&size,&pkt_copy[2],2);
+    //memcpy(&size,&pkt_copy[2],2);
     memcpy(&pkt_d->size,&pkt_copy[2],2);//size
     memcpy(&pkt_d->src_id,&pkt_copy[4],2);//srcID
     memcpy(&pkt_d->dest_id,&pkt_copy[6],2);//DestID
