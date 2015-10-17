@@ -123,7 +123,7 @@ class RoutingProtocolImpl : public RoutingProtocol {
       void HndAlm_PrtChk();
       void HndAlm_FrdChk();
       void send_data(unsigned short port, PktDetail *pkt, unsigned short size);
-      void send_pong(unsigned short port, PktDetail *pkt, unsigned short size);
+      void send_pong(unsigned short port, void* packet, unsigned short size);
       void update_port_status(unsigned short port, PktDetail *pkt, unsigned short size);
       void updt_DV_RtTbl(unsigned short port, PktDetail *pkt, unsigned short size);
       void updt_LS_RtTbl(unsigned short port, PktDetail *pkt, unsigned short size);

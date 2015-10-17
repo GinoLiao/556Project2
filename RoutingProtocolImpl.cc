@@ -176,7 +176,9 @@ void RoutingProtocolImpl::handle_alarm(void *data) {
 
 
   void RoutingProtocolImpl::send_data(unsigned short port, PktDetail *pkt, unsigned short size){}
-  void RoutingProtocolImpl::send_pong(unsigned short port, PktDetail *pkt, unsigned short size){}
+  void RoutingProtocolImpl::send_pong(unsigned short port, void *pkt, unsigned short size){
+
+  }
   void RoutingProtocolImpl::update_port_status(unsigned short port, PktDetail *pkt, unsigned short size){
     unsigned short idToRefresh = pkt->dest_id;
     for (PORT_STATUS *cur = portStatus;
@@ -226,7 +228,7 @@ void RoutingProtocolImpl::recv(unsigned short port, void *packet, unsigned short
          send_data(port, pkt, size);
   }
   else if(pkt->packet_type== PING){
-        send_pong(port, pkt, size);
+        send_pong(port, packet, size);
   }
   else if(pkt->packet_type==PONG){
         update_port_status(port, pkt, size);
