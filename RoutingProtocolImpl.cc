@@ -131,17 +131,17 @@ void RoutingProtocolImpl::handle_alarm(void *data) {
         ping_pkt[strlen(ping_pkt)-1] = 0;	//set its end
           //set packet type
         ePacketType PingPktType = PING;
-        memcpy(&ping_pkt[0],&PingPktType,8);	
+        memcpy(&ping_pkt[0],&PingPktType,1);	
           //set size
 
         unsigned short PingPktSizeNet = 65535;
-        memcpy(&ping_pkt[16],&PingPktSizeNet,16);
+        memcpy(&ping_pkt[16],&PingPktSizeNet,2);
           //set srouce ID
-        memcpy(&ping_pkt[32],&router_id,16);
+        memcpy(&ping_pkt[32],&router_id,2);
         	//destination ID unused in PING packet
         	//set payload to time
 		unsigned int time = sys->time();
-        memcpy(&ping_pkt[64],&time,32);
+        memcpy(&ping_pkt[64],&time,4);
         //send to all other ports to find neighbor
         sys->send(i, ping_pkt, PingPktSizeNet);
 		}
