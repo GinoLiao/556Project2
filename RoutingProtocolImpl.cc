@@ -175,7 +175,6 @@ void RoutingProtocolImpl::handle_alarm(void *data) {
   void RoutingProtocolImpl::HndAlm_FrdChk(){}
 
 
-<<<<<<< HEAD
   void RoutingProtocolImpl::send_data(unsigned short port, PktDetail *pkt, unsigned short size){}
   void RoutingProtocolImpl::send_pong(unsigned short port, PktDetail *pkt, unsigned short size){}
   void RoutingProtocolImpl::update_port_status(unsigned short port, PktDetail *pkt, unsigned short size){
@@ -193,18 +192,7 @@ void RoutingProtocolImpl::handle_alarm(void *data) {
   void RoutingProtocolImpl::updt_DV_RtTbl(unsigned short port, PktDetail *pkt, unsigned short size){}
   void RoutingProtocolImpl::updt_LS_RtTbl(unsigned short port, PktDetail *pkt, unsigned short size){}
   void RoutingProtocolImpl::get_pkt_detail(void *pkt, PktDetail *pkt_d){
-=======
-  void RoutingProtocolImpl::send_data(unsigned short port, PktDetail pkt, unsigned short size){
-    /*
-    sys->send(port, packet, size);
-    */
-  }
-  void RoutingProtocolImpl::send_pong(unsigned short port, PktDetail pkt, unsigned short size){}
-  void RoutingProtocolImpl::update_port_status(unsigned short port, PktDetail pkt, unsigned short size){}
-  void RoutingProtocolImpl::updt_DV_RtTbl(unsigned short port, PktDetail pkt, unsigned short size){}
-  void RoutingProtocolImpl::updt_LS_RtTbl(unsigned short port, PktDetail pkt, unsigned short size){}
-  void RoutingProtocolImpl::get_pkt_detail(void *pkt, PktDetail pkt_d){
->>>>>>> origin/master
+
     pkt = NULL;
     /*pkt->packet_type = get_pkt_type(*packet);
     pkt->src_id = get_src_id(*packet);
