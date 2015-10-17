@@ -200,12 +200,13 @@ void RoutingProtocolImpl::handle_alarm(void *data) {
 
 
   }
+  
   void RoutingProtocolImpl::updt_DV_RtTbl(unsigned short port, PktDetail *pkt, unsigned short size){}
   void RoutingProtocolImpl::updt_LS_RtTbl(unsigned short port, PktDetail *pkt, unsigned short size){}
-	void RoutingProtocolImpl::get_pkt_detail(void *pkt, PktDetail *pkt_d, unsigned short size){
+  void RoutingProtocolImpl::get_pkt_detail(void *pkt, PktDetail *pkt_d, unsigned short size){
 	char *pkt_copy={0};
     //pkt_copy = (char *) malloc(size);
-	*pkt_copy = *(char*) pkt;
+	*pkt_copy = ntohs(*(char*) pkt);
     memcpy(&pkt_d->packet_type,&pkt_copy[0],1);//packetType
     //memcpy(&size,&pkt_copy[2],2);
     memcpy(&pkt_d->size,&pkt_copy[2],2);//size
