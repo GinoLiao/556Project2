@@ -175,11 +175,7 @@ void RoutingProtocolImpl::handle_alarm(void *data) {
   void RoutingProtocolImpl::HndAlm_FrdChk(){}
 
 
-  void RoutingProtocolImpl::send_data(unsigned short port, PktDetail pkt, unsigned short size){
-  	/*
-  	sys->send(port, packet, size);
-  	*/
-  }
+  void RoutingProtocolImpl::send_data(unsigned short port, PktDetail pkt, unsigned short size){}
   void RoutingProtocolImpl::send_pong(unsigned short port, PktDetail pkt, unsigned short size){}
   void RoutingProtocolImpl::update_port_status(unsigned short port, PktDetail pkt, unsigned short size){}
   void RoutingProtocolImpl::updt_DV_RtTbl(unsigned short port, PktDetail pkt, unsigned short size){}
