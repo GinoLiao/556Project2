@@ -216,7 +216,7 @@ void RoutingProtocolImpl::handle_alarm(void *data) {
 
 void RoutingProtocolImpl::recv(unsigned short port, void *packet, unsigned short size) {
   // add your own code
-  PktDetail *pkt;
+  PktDetail *pkt={0};
   pkt->src_id=0;
   get_pkt_detail(packet, pkt, size);
   
