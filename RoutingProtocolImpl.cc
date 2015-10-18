@@ -184,44 +184,7 @@ void RoutingProtocolImpl::handle_alarm(void *data) {
   void RoutingProtocolImpl::HndAlm_FrdChk(){}
 
 
-  void RoutingProtocolImpl::send_data(unsigned short port, PktDetail *pkt, unsigned short size){}
-  void RoutingProtocolImpl::send_pong(unsigned short port, void *pkt, unsigned short size){
-
-  }
-  void RoutingProtocolImpl::update_port_status(unsigned short port, PktDetail *pkt, unsigned short size){
-    unsigned short idToRefresh = pkt->dest_id;
-    for (PORT_STATUS *cur = portStatus;
-           cur->next != NULL;
-           cur=cur->next){
-            if(cur->id==idToRefresh){
-              cur->timestamp=sys->time();
-            }
-      }
-
-
-  }
   
-  void RoutingProtocolImpl::updt_DV_RtTbl(unsigned short port, PktDetail *pkt, unsigned short size){}
-  void RoutingProtocolImpl::updt_LS_RtTbl(unsigned short port, PktDetail *pkt, unsigned short size){}
-  void RoutingProtocolImpl::get_pkt_detail(void *pkt, PktDetail *pkt_d, unsigned short size){
-	char *pkt_copy={0};
-    //pkt_copy = (char *) malloc(size);
-	*pkt_copy = ntohs(*(char*) pkt);
-    memcpy(&pkt_d->packet_type,&pkt_copy[0],1);//packetType
-    //memcpy(&size,&pkt_copy[2],2);
-    memcpy(&pkt_d->size,&pkt_copy[2],2);//size
-    memcpy(&pkt_d->src_id,&pkt_copy[4],2);//srcID
-    memcpy(&pkt_d->dest_id,&pkt_copy[6],2);//DestID
-    memcpy(&pkt_d->payload,&pkt_copy[8],size-8);//payload
-    
-    
-    /*pkt->packet_type = get_pkt_type(*packet);
-    pkt->src_id = get_src_id(*packet);
-    pkt->dest_id = get_dest_id(*packet);
-    pkt->size = size;*/
-    //get payload
-    //return pkt;
-  }
 
 
 
@@ -255,6 +218,48 @@ void RoutingProtocolImpl::recv(unsigned short port, void *packet, unsigned short
    
    
 }
+
+
+
+
+  void RoutingProtocolImpl::send_data(unsigned short port, PktDetail *pkt, unsigned short size){}
+  void RoutingProtocolImpl::send_pong(unsigned short port, void *pkt, unsigned short size){
+
+  }
+  void RoutingProtocolImpl::update_port_status(unsigned short port, PktDetail *pkt, unsigned short size){
+    unsigned short idToRefresh = pkt->dest_id;
+    for (PORT_STATUS *cur = portStatus;
+           cur->next != NULL;
+           cur=cur->next){
+            if(cur->id==idToRefresh){
+              cur->timestamp=sys->time();
+            }
+      }
+
+
+  }
+  
+  void RoutingProtocolImpl::updt_DV_RtTbl(unsigned short port, PktDetail *pkt, unsigned short size){}
+  void RoutingProtocolImpl::updt_LS_RtTbl(unsigned short port, PktDetail *pkt, unsigned short size){}
+  void RoutingProtocolImpl::get_pkt_detail(void *pkt, PktDetail *pkt_d, unsigned short size){
+  char *pkt_copy={0};
+    //pkt_copy = (char *) malloc(size);
+  *pkt_copy = ntohs(*(char*) pkt);
+    memcpy(&pkt_d->packet_type,&pkt_copy[0],1);//packetType
+    //memcpy(&size,&pkt_copy[2],2);
+    memcpy(&pkt_d->size,&pkt_copy[2],2);//size
+    memcpy(&pkt_d->src_id,&pkt_copy[4],2);//srcID
+    memcpy(&pkt_d->dest_id,&pkt_copy[6],2);//DestID
+    memcpy(&pkt_d->payload,&pkt_copy[8],size-8);//payload
+    
+    
+    /*pkt->packet_type = get_pkt_type(*packet);
+    pkt->src_id = get_src_id(*packet);
+    pkt->dest_id = get_dest_id(*packet);
+    pkt->size = size;*/
+    //get payload
+    //return pkt;
+  }
 //test Github desktop
 
 
