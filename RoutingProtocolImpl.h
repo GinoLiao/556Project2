@@ -54,7 +54,8 @@ class RoutingProtocolImpl : public RoutingProtocol {
         TYPE DEFINITIONS
     */
         struct PortStatus{
-          int id;
+          int id;	//id the port goes to
+		  int port_num;
           int timestamp;
           int TxDelay;
           struct PortStatus *next;
@@ -127,6 +128,11 @@ class RoutingProtocolImpl : public RoutingProtocol {
       void updt_DV_RtTbl(unsigned short port, PktDetail *pkt, unsigned short size);
       void updt_LS_RtTbl(unsigned short port, PktDetail *pkt, unsigned short size);
       void get_pkt_detail(void *pkt, PktDetail *pkt_d, unsigned short size);
+	  void SendMsg(PktDetail* pkt_d, unsigned short portNum);
+	  void NTOHS_message(char* buffer, unsigned short size);
+	  void HTONS_message(char* buffer, unsigned short size);
+	  void BufferConvHelper(char* buffer, unsigned short size,bool isNTOHS);
+	  void SendAllNeighbors(PktDetail* pkt_d);
 
 
     
