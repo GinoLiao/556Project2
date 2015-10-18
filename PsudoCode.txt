@@ -18,5 +18,39 @@ wait ( sees a link cost change to neighbor V
 	}
 }
 
+/////////////////////////////////////////////
+//      Psudo code for DV protocol V2      //
+/////////////////////////////////////////////
+
+void MakeForwardingTable(){
+	for (all nodes in PortStatus){
+		if (cost!= infinity){
+			send(DV_UPDATE message to the neighbor);
+		}
+	}
+}
+
+HndAlm_frd(){
+	
+	for(all nodes in portStatus){
+		if(sees a link cost change to neighbor V){
+			for (all destinations Y through V){
+				D(A,Y, V) =  D(A,Y,V) + d 						//c(A,V) changes by d
+			} 
+		}
+		if (there is a new minimum for destination Y){
+			send new message containing D(A, Y) to all neighbors  /* D(A,Y) denotes the min D(A,Y,*) */
+		}
+	}
+
+	
+}
+
+void updt_DV_RtTbl(unsigned short port, PktDetail *pkt, unsigned short size){
+	//update D(V, Y) received from V)    shortest path from V to some Y has changed 
+
+	D(A,Y,V) = c(A,V) + D(V, Y);
+}
+
 
 
