@@ -194,14 +194,14 @@ void RoutingProtocolImpl::recv(unsigned short port, void *packet, unsigned short
   PktDetail *pkt={0};
   pkt->src_id=0;
   get_pkt_detail(packet, pkt, size);
-  
+  char *buffer=(char *) packet;
   
   
   if(pkt->packet_type == DATA) {
          send_data(port, pkt, size);
   }
   else if(pkt->packet_type== PING){
-        send_pong(port, packet, size);
+        send_pong(port, buffer, size);
   }
   else if(pkt->packet_type==PONG){
         update_port_status(port, pkt, size);
@@ -223,9 +223,21 @@ void RoutingProtocolImpl::recv(unsigned short port, void *packet, unsigned short
 
 
   void RoutingProtocolImpl::send_data(unsigned short port, PktDetail *pkt, unsigned short size){}
-  void RoutingProtocolImpl::send_pong(unsigned short port, void *pkt, unsigned short size){
 
-  }
+  void RoutingProtocolImpl::send_pong(unsigned short port, char *buffer, unsigned short size){
+       //char *buffer= (char *) packet;
+       // char type = *(char *)buffer;
+        unsigned short src_id = ntohs(*(unsigned short *) (buffer + sizeof(int)));
+        unsigned short dest_id = ntohs(*(unsigned short *) (buffer + sizeof(int) + sizeof(unsigned short)));
+        *(char *)buffer=2;
+        ePacketType PongPktType = PONG;
+        memcpy(buffer,&PongPktType,1);
+        //memcpy(buffer, PONG, 1);
+        *(unsigned short *) (buffer + sizeof(int))=htons(dest_id);
+        *(unsigned short *) (buffer + sizeof(int)+sizeof(unsigned short))=htons(src_id);
+        sys->send(port, buffer, size);
+      }
+
   void RoutingProtocolImpl::update_port_status(unsigned short port, PktDetail *pkt, unsigned short size){
     unsigned short idToRefresh = pkt->dest_id;
     for (PORT_STATUS *cur = portStatus;
