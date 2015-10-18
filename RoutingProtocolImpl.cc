@@ -54,13 +54,15 @@ void RoutingProtocolImpl::init(unsigned short num_ports, unsigned short router_i
     test.packet_type=1;
     printf ("test.packet_type:%d\n", test.packet_type);*/
     //loop over all other nodes, initialize port status 
-    PORT_STATUS *cur = portStatus;
+    portStatus = new PORT_STATUS();
+	PORT_STATUS *cur = portStatus;
     for(unsigned short i=1; i <= num_ports;i++){
       if(i != router_id){	//if different port, put it to port status
       	cur->id = i;
         cur->timestamp = sys->time();
         cur->TxDelay = INFINITY_COST;	//set to inifinity
-        cur = cur->next;
+        cur->next = new PORT_STATUS();
+		cur = cur->next;
       }
     }
     
