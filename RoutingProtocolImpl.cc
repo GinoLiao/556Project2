@@ -66,7 +66,44 @@ void RoutingProtocolImpl::init(unsigned short num_ports, unsigned short router_i
     
   }
   
-  void RoutingProtocolImpl::InitRoutingTable(){}
+  void RoutingProtocolImpl::InitRoutingTable(){
+    
+
+    if (ProtocolType==P_DV){                      //Protocol for DV
+      /*
+      routTblDV = new ROUT_TBL_DV();              //Init the first element
+      
+      ROUT_TBL_DV *cur = routTblDV;
+
+      cur->Destination = RouterID;                //adds the first element
+      cur->NextHop=RouterID;
+      cur->Distance = 0;
+      cur->timestamp = sys->time();             
+      cur->next=new ROUT_TBL_DV();
+      cur = cur->next;
+
+      for(PORT_STATUS *curPortStat = portStatus;curPortStat!=NULL;curPortStat=curPortStat->next){
+        cur->Destination = curPortStat->id;
+        
+        if(curPortStat->TxDelay==INFINITY_COST){           //i.e. if the node is not a neighbor.
+          cur->NextHop=0;
+          cur->Distance = 0;
+        }
+        else{                                              //i.e. if the node is a neighbor
+          cur->NextHop=curPortStat->id;
+          cur->Distance = curPortStat->TxDelay;
+        }
+
+        cur->next=new ROUT_TBL_DV();                       // addes the next element at iter. the cur
+        cur = cur->next;
+      }
+      */
+      
+    }
+    else{
+
+    }
+  }
   /*
   	send ping to update port status with neighbors' delays
   */

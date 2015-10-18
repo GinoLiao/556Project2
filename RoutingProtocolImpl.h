@@ -63,7 +63,6 @@ class RoutingProtocolImpl : public RoutingProtocol {
 
         //now: DV only
         struct RoutingTable_DV{
-          int id;
           int Destination;  //destination id 
           int NextHop;      //next hop id
           int Distance;
