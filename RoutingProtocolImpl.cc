@@ -40,8 +40,8 @@ void RoutingProtocolImpl::init(unsigned short num_ports, unsigned short router_i
   
   printf("setting alarms\n");
 
-  static eAlarmType port_status_alarm_type = ALARM_PORT_STATUS;
-  (void) port_status_alarm_type;
+  // static eAlarmType port_status_alarm_type = ALARM_PORT_STATUS;
+  // (void) port_status_alarm_type;
   //SetPortStatusAlarm(this, 10000, &port_status_alarm_type);//every 10 sec
   //sys->set_alarm(this, 10000, &port_status_alarm_type);
   
@@ -121,14 +121,14 @@ void RoutingProtocolImpl::init(unsigned short num_ports, unsigned short router_i
       }
 
   void RoutingProtocolImpl::MakeForwardingTable(){}
-  void RoutingProtocolImpl::SetPortStatusAlarm(RoutingProtocol *r, unsigned int duration, void *data){
-	sys->set_alarm(r, duration, data);
+  // void RoutingProtocolImpl::SetPortStatusAlarm(RoutingProtocol *r, unsigned int duration, void *data){
+	// sys->set_alarm(r, duration, data);
 	  
-  }
+  // }
   void RoutingProtocolImpl::SetForwardingAlarm(){}
-  void RoutingProtocolImpl::SetPortCheckAlarm(RoutingProtocol *r, unsigned int duration, void *data){
-	sys->set_alarm(r, duration, data);  
-  }
+  // void RoutingProtocolImpl::SetPortCheckAlarm(RoutingProtocol *r, unsigned int duration, void *data){
+	// sys->set_alarm(r, duration, data);  
+  // }
   void RoutingProtocolImpl::SetForwardCheckAlarm(){}
 
 void RoutingProtocolImpl::handle_alarm(void *data) {
@@ -166,25 +166,7 @@ void RoutingProtocolImpl::handle_alarm(void *data) {
 	printf("Handle alarm of port status.\n");
 	//printf("Num of ports: %d, router ID: %d \n", num_ports, router_id);
 	for(unsigned short i=0;i<num_ports;i++){
-/*		PktDetail *pkt= new PktDetail();
-		ePacketType pkt_type = PING;
-		//printf("before casting packet type\n");
-		pkt->packet_type = (unsigned short)pkt_type;
-		//printf("packet type set\n");
-		pkt->src_id = router_id;
-		//printf("before setting size.\n");
-		pkt->size = 12;
-		unsigned int time = sys->time();
-		//printf("before setting payload to time.\n");
-		pkt->payload = (char *) malloc(4);
-		memcpy(&(pkt->payload),&time,4);
-		//cout<<"time: "<<time<<endl;
-		//cout<<"time pointer: "<<timeptr<<endl;
-		//cout<<"ping payload time "<<(unsigned int *)(pkt->payload)<<endl;
-		//printf("ready to send msg.\n");
-		SendMsg(pkt,i);
-		//printf("send done\n");*/
-		printf("num ports: %d \n", num_ports);
+		//printf("num ports: %d \n", num_ports);
 		unsigned short msgsize = 12;
 		char* buffer = (char*) malloc(msgsize);
 		//cout<<"buffer: "<<strlen(buffer)<<endl;
@@ -215,7 +197,18 @@ void RoutingProtocolImpl::handle_alarm(void *data) {
 		//cout<<"before sys send"<<endl;
 		//cout<<"msg size: "<<msgsize<<endl;
 		//cout<< "pkt type: "<<(int)buffer[0]<<endl;
-		sys->send(i,buffer,msgsize);
+		PktDetail *pkt= new PktDetail();
+		pkt->packet_type = (unsigned short)PING;
+		pkt->size = msgsize;
+		pkt->src_id = router_id;
+		pkt->payload = (char *)malloc(4);
+		memcpy(&pkt->payload, &time,4);
+		//printf("pkt type %d\n",*(unsigned int*)&pkt->packet_type);
+		//printf("pkt src id %d\n",*(unsigned int*)&pkt->src_id);
+		//printf("pkt size %d\n",*(unsigned int*)&pkt->size);
+		printf("payload time %d\n",*(unsigned int*)&pkt->payload);
+		SendMsg(pkt,i);
+		//sys->send(i,buffer,msgsize);
 	}
   }
   
@@ -377,9 +370,14 @@ void RoutingProtocolImpl::update_port_status(unsigned short port, PktDetail *pkt
 		//printf("time: %d\n", time);
 		//while(1);
 		pkt_d->payload = (char *)malloc(size-8);
-		memcpy(&pkt_d->payload,&pkt_copy[8],size-8);//payload
-		//printf("pkt_d->payload: %d\n", *(int *)&pkt_d->payload);
-		
+		for(int i=0; i<size-8;i+=4){
+			unsigned int payloadTempNet;
+			memcpy(&payloadTempNet,&pkt_copy[8+i],4);
+			unsigned int payloadTempHost = ntohl(payloadTempNet);
+			printf("payload temp host %d\n", payloadTempHost);
+			memcpy(&pkt_d->payload[i],&payloadTempHost,4);//payload
+		}
+		printf("pkt_d->payload: %d\n", *(int *)&pkt_d->payload);
 		/*pkt->packet_type = get_pkt_type(*packet);
 		pkt->src_id = get_src_id(*packet);
 		pkt->dest_id = get_dest_id(*packet);
@@ -396,33 +394,39 @@ void RoutingProtocolImpl::update_port_status(unsigned short port, PktDetail *pkt
   }
   
   void RoutingProtocolImpl::SendMsg(PktDetail* pkt_d, unsigned short portNum){
+	cout<<"in send msg"<<endl;
     char* buffer = (char*) malloc(pkt_d->size);
-	//cout<<"buffer: "<<strlen(buffer)<<endl;
-	//cout<<"pkt size "<<pkt_d->size<<endl;
-    unsigned short type =   (unsigned short) (pkt_d->packet_type);
-	cout<<"pkt_detail type "<<pkt_d->packet_type<<endl;
-    memcpy(&buffer[0], &type, 2);
-	cout<< "pkt type: "<<(int)buffer[0]<<endl;
+	ePacketType pkt_type = (ePacketType)pkt_d->packet_type;
+	cout<<"pkt_detail type "<<pkt_type<<endl;
+    memcpy(&buffer[0], &pkt_type, 1);
     unsigned short msgsize = pkt_d->size;
-	//cout<<"msgsize: "<< msgsize<<endl;
-    memcpy(&buffer[2], &msgsize, 2);
+	unsigned short msgsizeNet = htons(msgsize);
+	cout<<"msgsize: "<< msgsize<<endl;
+    memcpy(&buffer[2], &msgsizeNet, 2);
     unsigned short srcID = pkt_d->src_id;
-    //cout<<"src id "<<pkt_d->src_id<<endl;
-	memcpy(&buffer[4], &srcID, 2);
+	unsigned short srcIDNet = htons(srcID);
+    cout<<"src id "<<pkt_d->src_id<<endl;
+	memcpy(&buffer[4], &srcIDNet, 2);
     unsigned short destID = pkt_d->dest_id;
-	//cout<<"dest id "<<pkt_d->dest_id<<endl;
-    memcpy(&buffer[6], &destID, 2);
+	unsigned short destIDNet = htons(destID);
+	cout<<"dest id "<<pkt_d->dest_id<<endl;
+    memcpy(&buffer[6], &destIDNet, 2);
 	char* msgPayload = (char *) malloc(msgsize-8);
     memcpy(&msgPayload,&(pkt_d->payload),4);
+	printf("msgPayload %d\n",*(int*)&msgPayload);
 	//cout<<"payload "<<(unsigned int *)(pkt_d->payload)<<endl;
-    memcpy(&buffer[8], &msgPayload, msgsize-8);
-	//cout<<"msgPayload "<<(unsigned int *)(msgPayload)<<endl;
+	for(int i=0; i<msgsize-8;i=i+4){
+		unsigned int msgPayloadTemp;
+		memcpy(&msgPayloadTemp, &msgPayload+i, 4);
+		unsigned int msgPayloadTempNet = htonl(msgPayloadTemp);
+		memcpy(&buffer[8+i], &msgPayloadTempNet, 4);
+		printf("msgPayload temp %d\n",(msgPayloadTemp));
+	}
     //cout<<"buffer: "<<strlen(buffer)<<endl;
-	HTONS_message(buffer,msgsize);
+	//HTONS_message(buffer,msgsize);
 	//cout<<"buffer Net: "<<strlen(buffer)<<endl;
 	//cout<<"before sys send"<<endl;
 	//cout<<"msg size: "<<msgsize<<endl;
-	cout<< "pkt type: "<<(int)buffer[0]<<endl;
     sys->send(portNum,buffer,msgsize);
 
   }

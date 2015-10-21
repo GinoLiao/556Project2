@@ -16,28 +16,51 @@ Num of ports: 1, router ID: 1
 initialization starts
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 0
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 1
+dest id 0
+msgPayload 0
+msgPayload temp 0
 setting port update alarm. router: 1
 setting alarms
 Num of ports: 1, router ID: 2 
 initialization starts
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 0
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 2
+dest id 0
+msgPayload 0
+msgPayload temp 0
 setting port update alarm. router: 2
 setting alarms
 Step 2: Simulator beginning to run...
 time = 0 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 0 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 0.01 Event_Recv_Pkt_On_Node 2 packet type is PING
+payload temp host 0
+pkt_d->payload: 303024
 time = 0.01 Event_Recv_Pkt_On_Node 1 packet type is PING
+payload temp host 0
+pkt_d->payload: 302928
 time = 0.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 0.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 0.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+payload temp host 0
+pkt_d->payload: 304848
 time = 0.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+payload temp host 0
+pkt_d->payload: 303056
 time = 1 Event_Alarm on node 2
 handle port check alarm.
 time = 1 Event_Xmit_Data_Pkt source node 2 destination node 1 packet type is DATA
+pkt_d->payload: 304880
 time = 1 Event_Alarm on node 1
 handle port check alarm.
 time = 2 Event_Alarm on node 2
@@ -75,25 +98,47 @@ handle port check alarm.
 time = 10 Event_Alarm on node 2
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 10000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 2
+dest id 0
+msgPayload 10000
+msgPayload temp 10000
 setting port update alarm. router: 2
 time = 10 Event_Alarm on node 1
 handle port check alarm.
 time = 10 Event_Alarm on node 1
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 10000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 1
+dest id 0
+msgPayload 10000
+msgPayload temp 10000
 setting port update alarm. router: 1
 time = 10 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 10 Event_Alarm on node 2
 handle port check alarm.
 time = 10 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 10.01 Event_Recv_Pkt_On_Node 2 packet type is PING
+payload temp host 10000
+pkt_d->payload: 305040
 time = 10.01 Event_Recv_Pkt_On_Node 1 packet type is PING
+payload temp host 10000
+pkt_d->payload: 305392
 time = 10.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 10.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 10.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+payload temp host 10000
+pkt_d->payload: 305456
 time = 10.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+payload temp host 10000
+pkt_d->payload: 304112
 time = 11 Event_Alarm on node 1
 handle port check alarm.
 time = 11 Event_Alarm on node 2
@@ -133,25 +178,47 @@ handle port check alarm.
 time = 20 Event_Alarm on node 1
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 20000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 1
+dest id 0
+msgPayload 20000
+msgPayload temp 20000
 setting port update alarm. router: 1
 time = 20 Event_Alarm on node 2
 handle port check alarm.
 time = 20 Event_Alarm on node 2
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 20000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 2
+dest id 0
+msgPayload 20000
+msgPayload temp 20000
 setting port update alarm. router: 2
 time = 20 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 20 Event_Alarm on node 1
 handle port check alarm.
 time = 20 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 20.01 Event_Recv_Pkt_On_Node 1 packet type is PING
+payload temp host 20000
+pkt_d->payload: 305584
 time = 20.01 Event_Recv_Pkt_On_Node 2 packet type is PING
+payload temp host 20000
+pkt_d->payload: 305936
 time = 20.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 20.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 20.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+payload temp host 20000
+pkt_d->payload: 306064
 time = 20.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+payload temp host 20000
+pkt_d->payload: 305856
 time = 21 Event_Alarm on node 2
 handle port check alarm.
 time = 21 Event_Alarm on node 1
@@ -191,25 +258,47 @@ handle port check alarm.
 time = 30 Event_Alarm on node 2
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 30000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 2
+dest id 0
+msgPayload 30000
+msgPayload temp 30000
 setting port update alarm. router: 2
 time = 30 Event_Alarm on node 1
 handle port check alarm.
 time = 30 Event_Alarm on node 1
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 30000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 1
+dest id 0
+msgPayload 30000
+msgPayload temp 30000
 setting port update alarm. router: 1
 time = 30 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 30 Event_Alarm on node 2
 handle port check alarm.
 time = 30 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 30.01 Event_Recv_Pkt_On_Node 2 packet type is PING
+payload temp host 30000
+pkt_d->payload: 306192
 time = 30.01 Event_Recv_Pkt_On_Node 1 packet type is PING
+payload temp host 30000
+pkt_d->payload: 306544
 time = 30.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 30.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 30.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+payload temp host 30000
+pkt_d->payload: 306672
 time = 30.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+payload temp host 30000
+pkt_d->payload: 306464
 time = 31 Event_Alarm on node 1
 handle port check alarm.
 time = 31 Event_Alarm on node 2
@@ -249,25 +338,47 @@ handle port check alarm.
 time = 40 Event_Alarm on node 1
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 40000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 1
+dest id 0
+msgPayload 40000
+msgPayload temp 40000
 setting port update alarm. router: 1
 time = 40 Event_Alarm on node 2
 handle port check alarm.
 time = 40 Event_Alarm on node 2
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 40000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 2
+dest id 0
+msgPayload 40000
+msgPayload temp 40000
 setting port update alarm. router: 2
 time = 40 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 40 Event_Alarm on node 1
 handle port check alarm.
 time = 40 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 40.01 Event_Recv_Pkt_On_Node 1 packet type is PING
+payload temp host 40000
+pkt_d->payload: 306800
 time = 40.01 Event_Recv_Pkt_On_Node 2 packet type is PING
+payload temp host 40000
+pkt_d->payload: 307152
 time = 40.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 40.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 40.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+payload temp host 40000
+pkt_d->payload: 307280
 time = 40.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+payload temp host 40000
+pkt_d->payload: 307072
 time = 41 Event_Alarm on node 2
 handle port check alarm.
 time = 41 Event_Alarm on node 1
@@ -307,25 +418,47 @@ handle port check alarm.
 time = 50 Event_Alarm on node 2
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 50000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 2
+dest id 0
+msgPayload 50000
+msgPayload temp 50000
 setting port update alarm. router: 2
 time = 50 Event_Alarm on node 1
 handle port check alarm.
 time = 50 Event_Alarm on node 1
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 50000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 1
+dest id 0
+msgPayload 50000
+msgPayload temp 50000
 setting port update alarm. router: 1
 time = 50 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 50 Event_Alarm on node 2
 handle port check alarm.
 time = 50 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 50.01 Event_Recv_Pkt_On_Node 2 packet type is PING
+payload temp host 50000
+pkt_d->payload: 307408
 time = 50.01 Event_Recv_Pkt_On_Node 1 packet type is PING
+payload temp host 50000
+pkt_d->payload: 307760
 time = 50.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 50.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 50.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+payload temp host 50000
+pkt_d->payload: 307888
 time = 50.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+payload temp host 50000
+pkt_d->payload: 307680
 time = 51 Event_Alarm on node 1
 handle port check alarm.
 time = 51 Event_Alarm on node 2
@@ -365,25 +498,47 @@ handle port check alarm.
 time = 60 Event_Alarm on node 1
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 60000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 1
+dest id 0
+msgPayload 60000
+msgPayload temp 60000
 setting port update alarm. router: 1
 time = 60 Event_Alarm on node 2
 handle port check alarm.
 time = 60 Event_Alarm on node 2
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 60000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 2
+dest id 0
+msgPayload 60000
+msgPayload temp 60000
 setting port update alarm. router: 2
 time = 60 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 60 Event_Alarm on node 1
 handle port check alarm.
 time = 60 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 60.01 Event_Recv_Pkt_On_Node 1 packet type is PING
+payload temp host 60000
+pkt_d->payload: 308016
 time = 60.01 Event_Recv_Pkt_On_Node 2 packet type is PING
+payload temp host 60000
+pkt_d->payload: 308368
 time = 60.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 60.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 60.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+payload temp host 60000
+pkt_d->payload: 308496
 time = 60.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+payload temp host 60000
+pkt_d->payload: 308288
 time = 61 Event_Alarm on node 2
 handle port check alarm.
 time = 61 Event_Alarm on node 1
@@ -423,25 +578,47 @@ handle port check alarm.
 time = 70 Event_Alarm on node 2
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 70000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 2
+dest id 0
+msgPayload 70000
+msgPayload temp 70000
 setting port update alarm. router: 2
 time = 70 Event_Alarm on node 1
 handle port check alarm.
 time = 70 Event_Alarm on node 1
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 70000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 1
+dest id 0
+msgPayload 70000
+msgPayload temp 70000
 setting port update alarm. router: 1
 time = 70 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 70 Event_Alarm on node 2
 handle port check alarm.
 time = 70 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 70.01 Event_Recv_Pkt_On_Node 2 packet type is PING
+payload temp host 70000
+pkt_d->payload: 308624
 time = 70.01 Event_Recv_Pkt_On_Node 1 packet type is PING
+payload temp host 70000
+pkt_d->payload: 308976
 time = 70.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 70.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 70.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+payload temp host 70000
+pkt_d->payload: 309104
 time = 70.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+payload temp host 70000
+pkt_d->payload: 308896
 time = 71 Event_Alarm on node 1
 handle port check alarm.
 time = 71 Event_Alarm on node 2
@@ -481,25 +658,47 @@ handle port check alarm.
 time = 80 Event_Alarm on node 1
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 80000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 1
+dest id 0
+msgPayload 80000
+msgPayload temp 80000
 setting port update alarm. router: 1
 time = 80 Event_Alarm on node 2
 handle port check alarm.
 time = 80 Event_Alarm on node 2
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 80000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 2
+dest id 0
+msgPayload 80000
+msgPayload temp 80000
 setting port update alarm. router: 2
 time = 80 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 80 Event_Alarm on node 1
 handle port check alarm.
 time = 80 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 80.01 Event_Recv_Pkt_On_Node 1 packet type is PING
+payload temp host 80000
+pkt_d->payload: 309232
 time = 80.01 Event_Recv_Pkt_On_Node 2 packet type is PING
+payload temp host 80000
+pkt_d->payload: 309584
 time = 80.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 80.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 80.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+payload temp host 80000
+pkt_d->payload: 309712
 time = 80.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+payload temp host 80000
+pkt_d->payload: 309504
 time = 81 Event_Alarm on node 2
 handle port check alarm.
 time = 81 Event_Alarm on node 1
@@ -539,25 +738,47 @@ handle port check alarm.
 time = 90 Event_Alarm on node 2
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 90000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 2
+dest id 0
+msgPayload 90000
+msgPayload temp 90000
 setting port update alarm. router: 2
 time = 90 Event_Alarm on node 1
 handle port check alarm.
 time = 90 Event_Alarm on node 1
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 90000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 1
+dest id 0
+msgPayload 90000
+msgPayload temp 90000
 setting port update alarm. router: 1
 time = 90 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 90 Event_Alarm on node 2
 handle port check alarm.
 time = 90 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 90.01 Event_Recv_Pkt_On_Node 2 packet type is PING
+payload temp host 90000
+pkt_d->payload: 309840
 time = 90.01 Event_Recv_Pkt_On_Node 1 packet type is PING
+payload temp host 90000
+pkt_d->payload: 310192
 time = 90.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 90.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 90.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+payload temp host 90000
+pkt_d->payload: 310320
 time = 90.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+payload temp host 90000
+pkt_d->payload: 310112
 time = 91 Event_Alarm on node 1
 handle port check alarm.
 time = 91 Event_Alarm on node 2
@@ -597,26 +818,49 @@ handle port check alarm.
 time = 100 Event_Alarm on node 1
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 100000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 1
+dest id 0
+msgPayload 100000
+msgPayload temp 100000
 setting port update alarm. router: 1
 time = 100 Event_Alarm on node 2
 handle port check alarm.
 time = 100 Event_Alarm on node 2
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 100000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 2
+dest id 0
+msgPayload 100000
+msgPayload temp 100000
 setting port update alarm. router: 2
 time = 100 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 100 Event_Alarm on node 1
 handle port check alarm.
 time = 100 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 100 Event_Xmit_Data_Pkt source node 1 destination node 2 packet type is DATA
+pkt_d->payload: 310448
 time = 100.01 Event_Recv_Pkt_On_Node 1 packet type is PING
+payload temp host 100000
+pkt_d->payload: 304240
 time = 100.01 Event_Recv_Pkt_On_Node 2 packet type is PING
+payload temp host 100000
+pkt_d->payload: 310800
 time = 100.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 100.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 100.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+payload temp host 100000
+pkt_d->payload: 310928
 time = 100.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+payload temp host 100000
+pkt_d->payload: 310720
 time = 101 Event_Alarm on node 1
 handle port check alarm.
 time = 101 Event_Alarm on node 2
@@ -656,26 +900,49 @@ handle port check alarm.
 time = 110 Event_Alarm on node 2
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 110000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 2
+dest id 0
+msgPayload 110000
+msgPayload temp 110000
 setting port update alarm. router: 2
 time = 110 Event_Xmit_Data_Pkt source node 2 destination node 1 packet type is DATA
+pkt_d->payload: 311168
 time = 110 Event_Alarm on node 2
 handle port check alarm.
 time = 110 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 110 Event_Alarm on node 1
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 110000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 1
+dest id 0
+msgPayload 110000
+msgPayload temp 110000
 setting port update alarm. router: 1
 time = 110 Event_Alarm on node 1
 handle port check alarm.
 time = 110 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 110.01 Event_Recv_Pkt_On_Node 1 packet type is PING
+payload temp host 110000
+pkt_d->payload: 311328
 time = 110.01 Event_Recv_Pkt_On_Node 2 packet type is PING
+payload temp host 110000
+pkt_d->payload: 311232
 time = 110.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 110.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 110.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+payload temp host 110000
+pkt_d->payload: 311568
 time = 110.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+payload temp host 110000
+pkt_d->payload: 311472
 time = 111 Event_Alarm on node 2
 handle port check alarm.
 time = 111 Event_Alarm on node 1
@@ -715,26 +982,49 @@ handle port check alarm.
 time = 120 Event_Alarm on node 2
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 120000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 2
+dest id 0
+msgPayload 120000
+msgPayload temp 120000
 setting port update alarm. router: 2
 time = 120 Event_Alarm on node 1
 handle port check alarm.
 time = 120 Event_Alarm on node 1
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 120000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 1
+dest id 0
+msgPayload 120000
+msgPayload temp 120000
 setting port update alarm. router: 1
 time = 120 Event_Alarm on node 2
 handle port check alarm.
 time = 120 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 120 Event_Xmit_Data_Pkt source node 1 destination node 2 packet type is DATA
+pkt_d->payload: 311968
 time = 120 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 120.01 Event_Recv_Pkt_On_Node 2 packet type is PING
+payload temp host 120000
+pkt_d->payload: 311728
 time = 120.01 Event_Recv_Pkt_On_Node 1 packet type is PING
+payload temp host 120000
+pkt_d->payload: 304176
 time = 120.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 120.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 120.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+payload temp host 120000
+pkt_d->payload: 312144
 time = 120.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+payload temp host 120000
+pkt_d->payload: 304480
 time = 121 Event_Alarm on node 2
 handle port check alarm.
 time = 121 Event_Alarm on node 1
@@ -774,25 +1064,47 @@ handle port check alarm.
 time = 130 Event_Alarm on node 2
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 130000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 2
+dest id 0
+msgPayload 130000
+msgPayload temp 130000
 setting port update alarm. router: 2
 time = 130 Event_Alarm on node 1
 handle port check alarm.
 time = 130 Event_Alarm on node 1
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 130000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 1
+dest id 0
+msgPayload 130000
+msgPayload temp 130000
 setting port update alarm. router: 1
 time = 130 Event_Alarm on node 2
 handle port check alarm.
 time = 130 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 130 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 130.01 Event_Recv_Pkt_On_Node 1 packet type is PING
+payload temp host 130000
+pkt_d->payload: 312512
 time = 130.01 Event_Recv_Pkt_On_Node 2 packet type is PING
+payload temp host 130000
+pkt_d->payload: 312624
 time = 130.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 130.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 130.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+payload temp host 130000
+pkt_d->payload: 312752
 time = 130.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+payload temp host 130000
+pkt_d->payload: 312304
 time = 131 Event_Alarm on node 2
 handle port check alarm.
 time = 131 Event_Alarm on node 1
@@ -832,25 +1144,47 @@ handle port check alarm.
 time = 140 Event_Alarm on node 2
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 140000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 2
+dest id 0
+msgPayload 140000
+msgPayload temp 140000
 setting port update alarm. router: 2
 time = 140 Event_Alarm on node 1
 handle port check alarm.
 time = 140 Event_Alarm on node 1
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 140000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 1
+dest id 0
+msgPayload 140000
+msgPayload temp 140000
 setting port update alarm. router: 1
 time = 140 Event_Alarm on node 2
 handle port check alarm.
 time = 140 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 140 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 140.01 Event_Recv_Pkt_On_Node 1 packet type is PING
+payload temp host 140000
+pkt_d->payload: 313120
 time = 140.01 Event_Recv_Pkt_On_Node 2 packet type is PING
+payload temp host 140000
+pkt_d->payload: 313232
 time = 140.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 140.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 140.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+payload temp host 140000
+pkt_d->payload: 313360
 time = 140.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+payload temp host 140000
+pkt_d->payload: 312912
 time = 141 Event_Alarm on node 2
 handle port check alarm.
 time = 141 Event_Alarm on node 1
@@ -890,25 +1224,47 @@ handle port check alarm.
 time = 150 Event_Alarm on node 2
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 150000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 2
+dest id 0
+msgPayload 150000
+msgPayload temp 150000
 setting port update alarm. router: 2
 time = 150 Event_Alarm on node 1
 handle port check alarm.
 time = 150 Event_Alarm on node 1
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 150000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 1
+dest id 0
+msgPayload 150000
+msgPayload temp 150000
 setting port update alarm. router: 1
 time = 150 Event_Alarm on node 2
 handle port check alarm.
 time = 150 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 150 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 150.01 Event_Recv_Pkt_On_Node 1 packet type is PING
+payload temp host 150000
+pkt_d->payload: 313728
 time = 150.01 Event_Recv_Pkt_On_Node 2 packet type is PING
+payload temp host 150000
+pkt_d->payload: 313840
 time = 150.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 150.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 150.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+payload temp host 150000
+pkt_d->payload: 313968
 time = 150.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+payload temp host 150000
+pkt_d->payload: 313520
 time = 151 Event_Alarm on node 2
 handle port check alarm.
 time = 151 Event_Alarm on node 1
@@ -948,25 +1304,47 @@ handle port check alarm.
 time = 160 Event_Alarm on node 2
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 160000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 2
+dest id 0
+msgPayload 160000
+msgPayload temp 160000
 setting port update alarm. router: 2
 time = 160 Event_Alarm on node 1
 handle port check alarm.
 time = 160 Event_Alarm on node 1
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 160000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 1
+dest id 0
+msgPayload 160000
+msgPayload temp 160000
 setting port update alarm. router: 1
 time = 160 Event_Alarm on node 2
 handle port check alarm.
 time = 160 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 160 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 160.01 Event_Recv_Pkt_On_Node 1 packet type is PING
+payload temp host 160000
+pkt_d->payload: 314336
 time = 160.01 Event_Recv_Pkt_On_Node 2 packet type is PING
+payload temp host 160000
+pkt_d->payload: 314448
 time = 160.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 160.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 160.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+payload temp host 160000
+pkt_d->payload: 314576
 time = 160.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+payload temp host 160000
+pkt_d->payload: 314128
 time = 161 Event_Alarm on node 2
 handle port check alarm.
 time = 161 Event_Alarm on node 1
@@ -1004,10 +1382,18 @@ handle port check alarm.
 time = 169 Event_Alarm on node 1
 handle port check alarm.
 time = 170 Event_Xmit_Data_Pkt source node 1 destination node 2 packet type is DATA
+pkt_d->payload: 314512
 time = 170 Event_Alarm on node 2
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 170000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 2
+dest id 0
+msgPayload 170000
+msgPayload temp 170000
 setting port update alarm. router: 2
 time = 170 Event_Alarm on node 1
 handle port check alarm.
@@ -1015,17 +1401,32 @@ time = 170 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 170 Event_Alarm on node 1
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 170000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 1
+dest id 0
+msgPayload 170000
+msgPayload temp 170000
 setting port update alarm. router: 1
 time = 170 Event_Alarm on node 2
 handle port check alarm.
 time = 170 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 170.01 Event_Recv_Pkt_On_Node 1 packet type is PING
+payload temp host 170000
+pkt_d->payload: 314944
 time = 170.01 Event_Recv_Pkt_On_Node 2 packet type is PING
+payload temp host 170000
+pkt_d->payload: 314848
 time = 170.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 170.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 170.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+payload temp host 170000
+pkt_d->payload: 315184
 time = 170.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+payload temp host 170000
+pkt_d->payload: 315088
 time = 171 Event_Alarm on node 1
 handle port check alarm.
 time = 171 Event_Alarm on node 2
@@ -1067,24 +1468,47 @@ handle port check alarm.
 time = 180 Event_Alarm on node 2
 handle port check alarm.
 time = 180 Event_Xmit_Data_Pkt source node 2 destination node 1 packet type is DATA
+pkt_d->payload: 315216
 time = 180 Event_Alarm on node 2
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 180000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 2
+dest id 0
+msgPayload 180000
+msgPayload temp 180000
 setting port update alarm. router: 2
 time = 180 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 180 Event_Alarm on node 1
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 180000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 1
+dest id 0
+msgPayload 180000
+msgPayload temp 180000
 setting port update alarm. router: 1
 time = 180 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 180.01 Event_Recv_Pkt_On_Node 1 packet type is PING
+payload temp host 180000
+pkt_d->payload: 315584
 time = 180.01 Event_Recv_Pkt_On_Node 2 packet type is PING
+payload temp host 180000
+pkt_d->payload: 315488
 time = 180.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 180.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 180.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+payload temp host 180000
+pkt_d->payload: 315824
 time = 180.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+payload temp host 180000
+pkt_d->payload: 315728
 time = 181 Event_Alarm on node 1
 handle port check alarm.
 time = 181 Event_Alarm on node 2
@@ -1126,24 +1550,47 @@ handle port check alarm.
 time = 190 Event_Alarm on node 2
 handle port check alarm.
 time = 190 Event_Xmit_Data_Pkt source node 1 destination node 2 packet type is DATA
+pkt_d->payload: 315856
 time = 190 Event_Alarm on node 1
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 190000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 1
+dest id 0
+msgPayload 190000
+msgPayload temp 190000
 setting port update alarm. router: 1
 time = 190 Event_Alarm on node 2
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 190000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 2
+dest id 0
+msgPayload 190000
+msgPayload temp 190000
 setting port update alarm. router: 2
 time = 190 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 190 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 190.01 Event_Recv_Pkt_On_Node 1 packet type is PING
+payload temp host 190000
+pkt_d->payload: 315984
 time = 190.01 Event_Recv_Pkt_On_Node 2 packet type is PING
+payload temp host 190000
+pkt_d->payload: 316336
 time = 190.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 190.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 190.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+payload temp host 190000
+pkt_d->payload: 316464
 time = 190.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+payload temp host 190000
+pkt_d->payload: 316256
 time = 191 Event_Alarm on node 2
 handle port check alarm.
 time = 191 Event_Alarm on node 1
@@ -1183,18 +1630,34 @@ handle port check alarm.
 time = 200 Event_Alarm on node 2
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 200000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 2
+dest id 0
+msgPayload 200000
+msgPayload temp 200000
 setting port update alarm. router: 2
 time = 200 Event_Alarm on node 1
 handle port check alarm.
 time = 200 Event_Alarm on node 1
 handle port status alarm.
 Handle alarm of port status.
-num ports: 1 
+payload time 200000
+in send msg
+pkt_detail type 1
+msgsize: 12
+src id 1
+dest id 0
+msgPayload 200000
+msgPayload temp 200000
 setting port update alarm. router: 1
 time = 200 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 200 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 200 Event_Alarm on node 2
 handle port check alarm.
 time = 200.01 Event_Recv_Pkt_On_Node 2 packet type is PING
+payload temp host 200000
+pkt_d->payload: 315152
 Simulator has ended.
