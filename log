@@ -45,18 +45,18 @@ time = 0 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 0 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 0.01 Event_Recv_Pkt_On_Node 2 packet type is PING
 payload temp host 0
-pkt_d->payload: 303024
+pkt_d->payload: 0
 time = 0.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 payload temp host 0
-pkt_d->payload: 302928
+pkt_d->payload: 0
 time = 0.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 0.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 0.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
 payload temp host 0
-pkt_d->payload: 304848
+pkt_d->payload: 0
 time = 0.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
 payload temp host 0
-pkt_d->payload: 303056
+pkt_d->payload: 0
 time = 1 Event_Alarm on node 2
 handle port check alarm.
 time = 1 Event_Xmit_Data_Pkt source node 2 destination node 1 packet type is DATA
@@ -127,18 +127,18 @@ handle port check alarm.
 time = 10 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 10.01 Event_Recv_Pkt_On_Node 2 packet type is PING
 payload temp host 10000
-pkt_d->payload: 305040
+pkt_d->payload: 10000
 time = 10.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 payload temp host 10000
-pkt_d->payload: 305392
+pkt_d->payload: 10000
 time = 10.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 10.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 10.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
 payload temp host 10000
-pkt_d->payload: 305456
+pkt_d->payload: 10000
 time = 10.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
 payload temp host 10000
-pkt_d->payload: 304112
+pkt_d->payload: 10000
 time = 11 Event_Alarm on node 1
 handle port check alarm.
 time = 11 Event_Alarm on node 2
@@ -207,18 +207,18 @@ handle port check alarm.
 time = 20 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 20.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 payload temp host 20000
-pkt_d->payload: 305584
+pkt_d->payload: 20000
 time = 20.01 Event_Recv_Pkt_On_Node 2 packet type is PING
 payload temp host 20000
-pkt_d->payload: 305936
+pkt_d->payload: 20000
 time = 20.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 20.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 20.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
 payload temp host 20000
-pkt_d->payload: 306064
+pkt_d->payload: 20000
 time = 20.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
 payload temp host 20000
-pkt_d->payload: 305856
+pkt_d->payload: 20000
 time = 21 Event_Alarm on node 2
 handle port check alarm.
 time = 21 Event_Alarm on node 1
@@ -287,18 +287,18 @@ handle port check alarm.
 time = 30 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 30.01 Event_Recv_Pkt_On_Node 2 packet type is PING
 payload temp host 30000
-pkt_d->payload: 306192
+pkt_d->payload: 30000
 time = 30.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 payload temp host 30000
-pkt_d->payload: 306544
+pkt_d->payload: 30000
 time = 30.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 30.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 30.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
 payload temp host 30000
-pkt_d->payload: 306672
+pkt_d->payload: 30000
 time = 30.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
 payload temp host 30000
-pkt_d->payload: 306464
+pkt_d->payload: 30000
 time = 31 Event_Alarm on node 1
 handle port check alarm.
 time = 31 Event_Alarm on node 2
@@ -367,18 +367,18 @@ handle port check alarm.
 time = 40 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 40.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 payload temp host 40000
-pkt_d->payload: 306800
+pkt_d->payload: 40000
 time = 40.01 Event_Recv_Pkt_On_Node 2 packet type is PING
 payload temp host 40000
-pkt_d->payload: 307152
+pkt_d->payload: 40000
 time = 40.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 40.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 40.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
 payload temp host 40000
-pkt_d->payload: 307280
+pkt_d->payload: 40000
 time = 40.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
 payload temp host 40000
-pkt_d->payload: 307072
+pkt_d->payload: 40000
 time = 41 Event_Alarm on node 2
 handle port check alarm.
 time = 41 Event_Alarm on node 1
@@ -447,18 +447,18 @@ handle port check alarm.
 time = 50 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 50.01 Event_Recv_Pkt_On_Node 2 packet type is PING
 payload temp host 50000
-pkt_d->payload: 307408
+pkt_d->payload: 50000
 time = 50.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 payload temp host 50000
-pkt_d->payload: 307760
+pkt_d->payload: 50000
 time = 50.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 50.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 50.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
 payload temp host 50000
-pkt_d->payload: 307888
+pkt_d->payload: 50000
 time = 50.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
 payload temp host 50000
-pkt_d->payload: 307680
+pkt_d->payload: 50000
 time = 51 Event_Alarm on node 1
 handle port check alarm.
 time = 51 Event_Alarm on node 2
@@ -527,18 +527,18 @@ handle port check alarm.
 time = 60 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 60.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 payload temp host 60000
-pkt_d->payload: 308016
+pkt_d->payload: 60000
 time = 60.01 Event_Recv_Pkt_On_Node 2 packet type is PING
 payload temp host 60000
-pkt_d->payload: 308368
+pkt_d->payload: 60000
 time = 60.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 60.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 60.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
 payload temp host 60000
-pkt_d->payload: 308496
+pkt_d->payload: 60000
 time = 60.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
 payload temp host 60000
-pkt_d->payload: 308288
+pkt_d->payload: 60000
 time = 61 Event_Alarm on node 2
 handle port check alarm.
 time = 61 Event_Alarm on node 1
@@ -607,18 +607,18 @@ handle port check alarm.
 time = 70 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 70.01 Event_Recv_Pkt_On_Node 2 packet type is PING
 payload temp host 70000
-pkt_d->payload: 308624
+pkt_d->payload: 70000
 time = 70.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 payload temp host 70000
-pkt_d->payload: 308976
+pkt_d->payload: 70000
 time = 70.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 70.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 70.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
 payload temp host 70000
-pkt_d->payload: 309104
+pkt_d->payload: 70000
 time = 70.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
 payload temp host 70000
-pkt_d->payload: 308896
+pkt_d->payload: 70000
 time = 71 Event_Alarm on node 1
 handle port check alarm.
 time = 71 Event_Alarm on node 2
@@ -687,18 +687,18 @@ handle port check alarm.
 time = 80 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 80.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 payload temp host 80000
-pkt_d->payload: 309232
+pkt_d->payload: 80000
 time = 80.01 Event_Recv_Pkt_On_Node 2 packet type is PING
 payload temp host 80000
-pkt_d->payload: 309584
+pkt_d->payload: 80000
 time = 80.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 80.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 80.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
 payload temp host 80000
-pkt_d->payload: 309712
+pkt_d->payload: 80000
 time = 80.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
 payload temp host 80000
-pkt_d->payload: 309504
+pkt_d->payload: 80000
 time = 81 Event_Alarm on node 2
 handle port check alarm.
 time = 81 Event_Alarm on node 1
@@ -767,18 +767,18 @@ handle port check alarm.
 time = 90 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 90.01 Event_Recv_Pkt_On_Node 2 packet type is PING
 payload temp host 90000
-pkt_d->payload: 309840
+pkt_d->payload: 90000
 time = 90.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 payload temp host 90000
-pkt_d->payload: 310192
+pkt_d->payload: 90000
 time = 90.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 90.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 90.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
 payload temp host 90000
-pkt_d->payload: 310320
+pkt_d->payload: 90000
 time = 90.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
 payload temp host 90000
-pkt_d->payload: 310112
+pkt_d->payload: 90000
 time = 91 Event_Alarm on node 1
 handle port check alarm.
 time = 91 Event_Alarm on node 2
@@ -849,18 +849,18 @@ time = 100 Event_Xmit_Data_Pkt source node 1 destination node 2 packet type is D
 pkt_d->payload: 310448
 time = 100.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 payload temp host 100000
-pkt_d->payload: 304240
+pkt_d->payload: 100000
 time = 100.01 Event_Recv_Pkt_On_Node 2 packet type is PING
 payload temp host 100000
-pkt_d->payload: 310800
+pkt_d->payload: 100000
 time = 100.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 100.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 100.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
 payload temp host 100000
-pkt_d->payload: 310928
+pkt_d->payload: 100000
 time = 100.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
 payload temp host 100000
-pkt_d->payload: 310720
+pkt_d->payload: 100000
 time = 101 Event_Alarm on node 1
 handle port check alarm.
 time = 101 Event_Alarm on node 2
@@ -931,18 +931,18 @@ handle port check alarm.
 time = 110 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 110.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 payload temp host 110000
-pkt_d->payload: 311328
+pkt_d->payload: 110000
 time = 110.01 Event_Recv_Pkt_On_Node 2 packet type is PING
 payload temp host 110000
-pkt_d->payload: 311232
+pkt_d->payload: 110000
 time = 110.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 110.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 110.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
 payload temp host 110000
-pkt_d->payload: 311568
+pkt_d->payload: 110000
 time = 110.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
 payload temp host 110000
-pkt_d->payload: 311472
+pkt_d->payload: 110000
 time = 111 Event_Alarm on node 2
 handle port check alarm.
 time = 111 Event_Alarm on node 1
@@ -1013,18 +1013,18 @@ pkt_d->payload: 311968
 time = 120 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 120.01 Event_Recv_Pkt_On_Node 2 packet type is PING
 payload temp host 120000
-pkt_d->payload: 311728
+pkt_d->payload: 120000
 time = 120.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 payload temp host 120000
-pkt_d->payload: 304176
+pkt_d->payload: 120000
 time = 120.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 120.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 120.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
 payload temp host 120000
-pkt_d->payload: 312144
+pkt_d->payload: 120000
 time = 120.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
 payload temp host 120000
-pkt_d->payload: 304480
+pkt_d->payload: 120000
 time = 121 Event_Alarm on node 2
 handle port check alarm.
 time = 121 Event_Alarm on node 1
@@ -1093,18 +1093,18 @@ time = 130 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 130 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 130.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 payload temp host 130000
-pkt_d->payload: 312512
+pkt_d->payload: 130000
 time = 130.01 Event_Recv_Pkt_On_Node 2 packet type is PING
 payload temp host 130000
-pkt_d->payload: 312624
+pkt_d->payload: 130000
 time = 130.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 130.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 130.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
 payload temp host 130000
-pkt_d->payload: 312752
+pkt_d->payload: 130000
 time = 130.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
 payload temp host 130000
-pkt_d->payload: 312304
+pkt_d->payload: 130000
 time = 131 Event_Alarm on node 2
 handle port check alarm.
 time = 131 Event_Alarm on node 1
@@ -1173,18 +1173,18 @@ time = 140 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 140 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 140.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 payload temp host 140000
-pkt_d->payload: 313120
+pkt_d->payload: 140000
 time = 140.01 Event_Recv_Pkt_On_Node 2 packet type is PING
 payload temp host 140000
-pkt_d->payload: 313232
+pkt_d->payload: 140000
 time = 140.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 140.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 140.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
 payload temp host 140000
-pkt_d->payload: 313360
+pkt_d->payload: 140000
 time = 140.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
 payload temp host 140000
-pkt_d->payload: 312912
+pkt_d->payload: 140000
 time = 141 Event_Alarm on node 2
 handle port check alarm.
 time = 141 Event_Alarm on node 1
@@ -1253,18 +1253,18 @@ time = 150 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 150 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 150.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 payload temp host 150000
-pkt_d->payload: 313728
+pkt_d->payload: 150000
 time = 150.01 Event_Recv_Pkt_On_Node 2 packet type is PING
 payload temp host 150000
-pkt_d->payload: 313840
+pkt_d->payload: 150000
 time = 150.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 150.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 150.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
 payload temp host 150000
-pkt_d->payload: 313968
+pkt_d->payload: 150000
 time = 150.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
 payload temp host 150000
-pkt_d->payload: 313520
+pkt_d->payload: 150000
 time = 151 Event_Alarm on node 2
 handle port check alarm.
 time = 151 Event_Alarm on node 1
@@ -1333,18 +1333,18 @@ time = 160 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 160 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 160.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 payload temp host 160000
-pkt_d->payload: 314336
+pkt_d->payload: 160000
 time = 160.01 Event_Recv_Pkt_On_Node 2 packet type is PING
 payload temp host 160000
-pkt_d->payload: 314448
+pkt_d->payload: 160000
 time = 160.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 160.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 160.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
 payload temp host 160000
-pkt_d->payload: 314576
+pkt_d->payload: 160000
 time = 160.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
 payload temp host 160000
-pkt_d->payload: 314128
+pkt_d->payload: 160000
 time = 161 Event_Alarm on node 2
 handle port check alarm.
 time = 161 Event_Alarm on node 1
@@ -1415,18 +1415,18 @@ handle port check alarm.
 time = 170 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 170.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 payload temp host 170000
-pkt_d->payload: 314944
+pkt_d->payload: 170000
 time = 170.01 Event_Recv_Pkt_On_Node 2 packet type is PING
 payload temp host 170000
-pkt_d->payload: 314848
+pkt_d->payload: 170000
 time = 170.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 170.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 170.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
 payload temp host 170000
-pkt_d->payload: 315184
+pkt_d->payload: 170000
 time = 170.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
 payload temp host 170000
-pkt_d->payload: 315088
+pkt_d->payload: 170000
 time = 171 Event_Alarm on node 1
 handle port check alarm.
 time = 171 Event_Alarm on node 2
@@ -1497,18 +1497,18 @@ setting port update alarm. router: 1
 time = 180 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 180.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 payload temp host 180000
-pkt_d->payload: 315584
+pkt_d->payload: 180000
 time = 180.01 Event_Recv_Pkt_On_Node 2 packet type is PING
 payload temp host 180000
-pkt_d->payload: 315488
+pkt_d->payload: 180000
 time = 180.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 180.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 180.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
 payload temp host 180000
-pkt_d->payload: 315824
+pkt_d->payload: 180000
 time = 180.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
 payload temp host 180000
-pkt_d->payload: 315728
+pkt_d->payload: 180000
 time = 181 Event_Alarm on node 1
 handle port check alarm.
 time = 181 Event_Alarm on node 2
@@ -1579,18 +1579,18 @@ time = 190 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 190 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 190.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 payload temp host 190000
-pkt_d->payload: 315984
+pkt_d->payload: 190000
 time = 190.01 Event_Recv_Pkt_On_Node 2 packet type is PING
 payload temp host 190000
-pkt_d->payload: 316336
+pkt_d->payload: 190000
 time = 190.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 190.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 190.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
 payload temp host 190000
-pkt_d->payload: 316464
+pkt_d->payload: 190000
 time = 190.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
 payload temp host 190000
-pkt_d->payload: 316256
+pkt_d->payload: 190000
 time = 191 Event_Alarm on node 2
 handle port check alarm.
 time = 191 Event_Alarm on node 1
@@ -1659,5 +1659,5 @@ time = 200 Event_Alarm on node 2
 handle port check alarm.
 time = 200.01 Event_Recv_Pkt_On_Node 2 packet type is PING
 payload temp host 200000
-pkt_d->payload: 315152
+pkt_d->payload: 200000
 Simulator has ended.

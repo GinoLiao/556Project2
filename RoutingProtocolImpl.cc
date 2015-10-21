@@ -375,7 +375,7 @@ void RoutingProtocolImpl::update_port_status(unsigned short port, PktDetail *pkt
 			memcpy(&payloadTempNet,&pkt_copy[8+i],4);
 			unsigned int payloadTempHost = ntohl(payloadTempNet);
 			printf("payload temp host %d\n", payloadTempHost);
-			memcpy(&pkt_d->payload[i],&payloadTempHost,4);//payload
+			memcpy(&pkt_d->payload+i,&payloadTempHost,4);//payload
 		}
 		printf("pkt_d->payload: %d\n", *(int *)&pkt_d->payload);
 		/*pkt->packet_type = get_pkt_type(*packet);
