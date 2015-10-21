@@ -301,6 +301,22 @@ void RoutingProtocolImpl::send_pong(unsigned short port, char *buffer, unsigned 
                 //            HELPER FUNCTIONS            //
                 //                                        //
                 ////////////////////////////////////////////
+unsigned short RoutingProtocolImpl::findPortNumber(unsigned short neighborID){
+  for (PORT_STATUS *cur = portStatus;cur->next != NULL;cur=cur->next){
+      if(cur->id==neighborID){
+        return cur-> port_num;
+      }
+  }
+  return 0;
+}
+bool RoutingProtocolImpl::isNeighbor(unsigned short routID){
+    for (PORT_STATUS *cur = portStatus;cur->next != NULL;cur=cur->next){
+        if(cur->id==routID){
+          return true;
+        }
+    }
+    return false;
+}
 void RoutingProtocolImpl::SendMsg(PktDetail* pkt_d, unsigned short portNum){
     //cout<<"in send msg"<<endl;
     char* buffer = (char*) malloc(pkt_d->size);
@@ -479,16 +495,252 @@ void RoutingProtocolImpl::MakeForwardingTable(){}
                     //    ########          ####        //
                     //                                  // 
                     //////////////////////////////////////
-void RoutingProtocolImpl::InitRoutingTable_LS(){}
-void RoutingProtocolImpl::findMinInFrontier(){}
-void RoutingProtocolImpl::flood_LS(){}
-void RoutingProtocolImpl::send_data_LS(unsigned short port, PktDetail *pkt, char* buffer, unsigned short size){}
-void RoutingProtocolImpl::HndAlm_frd_LS(){}
-void RoutingProtocolImpl::updt_LS_RtTbl(unsigned short port, PktDetail *pkt, unsigned short size){}
-void RoutingProtocolImpl::addEntriesToLSRoutingTable(PktDetail *pkt){}
-void RoutingProtocolImpl::removeFromFrontier(unsigned short remove_id){}
-void RoutingProtocolImpl::addToFrontier(PktDetail *pkt){}
-void RoutingProtocolImpl::forwardPacket(PktDetail *pkt){}
+void RoutingProtocolImpl::InitRoutingTable_LS(){
+  //make a rounting table with cost to neighbors finite and non-neighbors infinite
+  //set total number of nodes to itself+neighbors to S.  
+  //make a link list of frontier nodes.
+  
+  routTblLS=NULL;
+  frontier=NULL;
+  for(PORT_STATUS *cur=portStatus;cur!=NULL;cur=cur->next){
+    if(cur->TxDelay!=INFINITY_COST){
+      ROUT_TBL_LS *addRout = new ROUT_TBL_LS();
+      addRout->Destination=cur->id;
+      addRout->NextHop=cur->port_num;
+      addRout->timestamp=sys->time();
+      addRout->Distance=cur->TxDelay;
+      addRout->seqNum=0;
+      
+      NODE_LS *addfrontier = new NODE_LS();
+      addfrontier->id=cur->id;
+      addfrontier->Distance=cur->TxDelay;
+
+      //config the add elts
+
+      addRout->next=routTblLS;
+      routTblLS=addRout;
+
+      addfrontier->next=frontier;
+      frontier->next=addfrontier;
+    }
+  }
+  minDistNode=NULL;
+  //find first minimum router to wait for.
+  findMinInFrontier();
+
+  allKnownNodes = new NODE_LS();
+  allKnownNodes->id=RouterID;
+  allKnownNodes->Distance=0;
+  allKnownNodes->next=NULL;
+
+  seqNumSelf=1;
+  neighbors=NULL;
+  flood_LS();
+
+}
+void RoutingProtocolImpl::findMinInFrontier(){
+  minDistNode->id=0;
+  minDistNode->Distance=INFINITY_COST;
+  for(NODE_LS *fcur=frontier;fcur!=NULL;fcur=fcur->next){
+    if(fcur->Distance<minDistNode->Distance){
+      minDistNode->id=fcur->id;
+      minDistNode->Distance=fcur->id;
+    }
+  }
+}
+void RoutingProtocolImpl::flood_LS(){
+  unsigned short size = 12;
+
+  //Deletes all neighbors
+  NODE_LS *neighborNode = neighbors;
+  while(neighborNode->next!=NULL){
+    NODE_LS *delNode = neighborNode;
+    neighborNode=neighborNode->next;
+    free(delNode);
+  }
+  neighbors=NULL;
+
+  //adds all neighbors back from portStatus
+  for(PORT_STATUS *cur=portStatus;cur!=NULL;cur=cur->next){
+    if(cur->TxDelay!=INFINITY_COST){
+      size+=4;
+
+      NODE_LS *addNeighbor = new NODE_LS();
+      addNeighbor->id=cur->id;
+      addNeighbor->Distance=cur->TxDelay;
+      addNeighbor->next=neighbors;
+      neighbors=addNeighbor; 
+    }
+  }
+
+  //configures the payload for the flood message
+  char *sendPayload = (char*) malloc(size-12); 
+  NODE_LS *cur_neighbor = neighbors;
+  for(int i=0;i<(size-12);i+=4){
+    memcpy(&sendPayload[i],&(cur_neighbor->id),2);
+    memcpy(&sendPayload[i+2],&(cur_neighbor->Distance),2);
+  }
+  PktDetail *floodMsg = new PktDetail();
+  floodMsg->packet_type=LS;
+  floodMsg->src_id=RouterID;
+  floodMsg->dest_id=0;
+  floodMsg->size=size;
+  floodMsg->payload=sendPayload;
+  SendAllNeighbors(floodMsg);
+  free(floodMsg);
+
+  //increment seqNumSelf 
+  seqNumSelf+=1;
+}
+void RoutingProtocolImpl::send_data_LS(unsigned short port, PktDetail *pkt, char* buffer, unsigned short size){
+  for(ROUT_TBL_LS *rcur = routTblLS;rcur!=NULL;rcur=rcur->next){
+    if(rcur->Destination==pkt->dest_id){
+      sys->send(rcur->NextHop,buffer,size);
+      return;
+    }
+  }
+}
+void RoutingProtocolImpl::HndAlm_frd_LS(){
+  //changed it to flood regardless of if the neighbors change, flood anyways
+  flood_LS();
+  /*
+  //checks if the distance from its neighbors change
+  for(PORT_STATUS *PEntry=portStatus;PEntry!=NULL;PEntry=PEntry->next){
+    for(NODE_LS *NEntry=neighbors;NEntry!=NULL;NEntry=NEntry->next){
+      if(  (PEntry->id==NEntry->id) && (PEntry->TxDelay != NEntry->Distance)  ){
+        //if so, flood
+        flood_LS();
+      }
+
+    }
+  }*/
+}
+
+
+void RoutingProtocolImpl::updt_LS_RtTbl(unsigned short port, PktDetail *pkt, unsigned short size){
+  unsigned int SequenceNum = (unsigned int) (pkt->payload[0]);
+  bool isSeqNumGood=false;
+  for(ROUT_TBL_LS *REntry=routTblLS;REntry->next != NULL;REntry=REntry->next){
+    if(  (REntry->Destination==pkt->src_id) && (REntry->seqNum < SequenceNum)  ){
+      isSeqNumGood=true;
+    }
+  }
+  if(isSeqNumGood){
+    //if the sequenc number of this message is okay
+    addEntriesToLSRoutingTable(pkt);
+    if(pkt->src_id==minDistNode->id){
+      //if node is the minimum node
+      removeFromFrontier(minDistNode->id);
+      addToFrontier(pkt);
+      forwardPacket(pkt);
+    }
+  }
+}
+void RoutingProtocolImpl::addEntriesToLSRoutingTable(PktDetail *pkt){
+  if(pkt->src_id==minDistNode->id){
+    //if the packet came from the minimum node
+    unsigned short minID=0;
+    unsigned short minDistance=INFINITY_COST;
+   
+    for(int i=0;i<pkt->size-12;pkt->size+=4){
+      unsigned short id= (unsigned short)(pkt->payload[i]);
+      unsigned short distance= (unsigned short)(pkt->payload[i+2]);
+      unsigned short knownNodeDistance=0;
+      
+      //find min in the payload
+      if(distance<minDistance){
+        minID=id;
+        minDistance=distance;
+      }
+
+      bool inRoutTable=false;
+ 
+      for(ROUT_TBL_LS *REntry=routTblLS;REntry->next != NULL;REntry=REntry->next){
+        if(REntry->Destination==id){
+          //this node already has an entry in the routing table
+          inRoutTable=true;
+          if(distance<REntry->Distance){
+            //i.e. this new path is better than the previous path.
+            REntry->Destination=id;
+            REntry->NextHop=findPortNumber(minDistNode->id);
+            REntry->Distance=knownNodeDistance+distance;
+            REntry->timestamp=sys->time();
+          }
+          else{
+            //refresh the timestamp;
+            REntry->timestamp=sys->time();
+          }
+        }
+      }
+      if(!inRoutTable){
+        //make a new routing entry for this node with the same port as the minimum node
+        ROUT_TBL_LS *addRout = new ROUT_TBL_LS();
+        addRout->Destination=id;  //destination id 
+        addRout->NextHop=findPortNumber(minDistNode->id);      //next hop id
+        addRout->Distance=knownNodeDistance+distance;
+        addRout->timestamp=sys->time();
+        addRout->next=routTblLS;
+
+        routTblLS=addRout;
+      }
+    }
+
+    //adds the min node in payload to the allKnownNodes
+    NODE_LS *addKnownNode = new NODE_LS();
+    addKnownNode->id=minID;
+    addKnownNode->Distance=minDistance;
+    addKnownNode->next=allKnownNodes;
+
+    allKnownNodes=addKnownNode;
+
+  }
+}
+void RoutingProtocolImpl::removeFromFrontier(unsigned short remove_id){
+  
+  for(NODE_LS *fcur=frontier;fcur!=NULL;){
+    if(fcur->id==remove_id){
+      if(fcur==frontier){
+        NODE_LS *delElm = fcur;
+        frontier=fcur->next;
+        fcur=fcur->next;
+        free(delElm);
+        return;
+      }
+      else{
+
+      }
+    }
+    fcur=fcur->next;
+  }
+}
+void RoutingProtocolImpl::addToFrontier(PktDetail *pkt){
+  for(int i=0;i<pkt->size-12;pkt->size+=4){
+    unsigned short id= (unsigned short)(pkt->payload[i]);
+    unsigned short distance= (unsigned short)(pkt->payload[i+2]);
+    bool isKnownNode=false;
+    for(NODE_LS *knownNode = allKnownNodes;knownNode!=NULL;knownNode=knownNode->next){
+      if(id==(knownNode->id)){
+        //this node is a known node
+        isKnownNode=true;
+      }
+    }
+    if(!isKnownNode){
+      //add it to the frontier
+      NODE_LS *addfrontier=new NODE_LS();
+      addfrontier->id=id;
+      addfrontier->Distance=distance;
+      addfrontier->next=frontier;
+      frontier=addfrontier;
+    }
+  }
+}
+void RoutingProtocolImpl::forwardPacket(PktDetail *pkt){
+  for(PORT_STATUS *PEntry;PEntry!=NULL;PEntry=PEntry->next){
+    if(PEntry->id !=pkt->src_id){
+      SendMsg(pkt,PEntry->port_num);
+    }
+  }
+}
 
                     //////////////////////////////////////
                     //                                  //
@@ -501,7 +753,134 @@ void RoutingProtocolImpl::forwardPacket(PktDetail *pkt){}
                     //    ########           ##         //
                     //                                  // 
                     //////////////////////////////////////
-void RoutingProtocolImpl::InitRoutingTable_DV(){}
-void RoutingProtocolImpl::send_data_DV(unsigned short port, PktDetail *pkt, char* buffer, unsigned short size){}
-void RoutingProtocolImpl::HndAlm_frd_DV(){}
-void RoutingProtocolImpl::updt_DV_RtTbl(unsigned short port, PktDetail *pkt, unsigned short size){}
+void RoutingProtocolImpl::InitRoutingTable_DV(){
+    routTblDV = new ROUT_TBL_DV();              //Init the first element
+      
+      ROUT_TBL_DV *cur = routTblDV;
+
+      cur->Destination = RouterID;                //adds the first element
+      cur->NextHop=RouterID;
+      cur->Distance = 0;
+      cur->timestamp = sys->time();             
+      cur->next=new ROUT_TBL_DV();
+      cur = cur->next;
+
+      for(PORT_STATUS *curPortStat = portStatus;curPortStat!=NULL;curPortStat=curPortStat->next){
+        
+        
+        if(curPortStat->TxDelay!=INFINITY_COST){           //i.e. if the node is a neighbor
+          cur->Destination = curPortStat->id;
+          cur->NextHop=curPortStat->id;
+          cur->Distance = curPortStat->TxDelay;
+          cur->next=new ROUT_TBL_DV();                       // addes the next element at iter. the cur
+          cur = cur->next;
+        }
+      }
+  }
+
+
+  void RoutingProtocolImpl::send_data_DV(unsigned short port, PktDetail *pkt, char* buffer, unsigned short size){
+  for(ROUT_TBL_DV *rcur = routTblDV;rcur!=NULL;rcur=rcur->next){
+        if(rcur->Destination==pkt->dest_id){
+          sys->send(rcur->NextHop,buffer,size);
+          return;
+        }
+      }
+  }
+  void RoutingProtocolImpl::HndAlm_frd_DV(){
+    for(PORT_STATUS *pcur = portStatus;pcur!=NULL;pcur=pcur->next){
+      if(pcur->TxDelay!=INFINITY_COST){                 
+      //i.e. the node is a neighbor
+        for(ROUT_TBL_DV *rcur = routTblDV;rcur!=NULL;rcur=rcur->next){      
+        //loop through all the entries
+          if(  (rcur->Destination==pcur->id)   &&   (rcur->Distance != pcur->TxDelay)  ){
+          //if this entry is for a neighbor and it's cost has changed
+            unsigned short costDiff = (pcur->TxDelay)-(rcur->Distance); 
+            
+            
+
+            if(costDiff<0){                             // sends the new cost of this neighbor to all neighbors
+              PktDetail *sendPkt = new PktDetail();
+              sendPkt->packet_type=DV;
+              sendPkt->src_id=RouterID;
+              sendPkt->size=8+4;
+              char* msgPayload=(char*)malloc(4);
+              memcpy(&msgPayload[0],&(pcur->id),2);
+              memcpy(&msgPayload[2],&(pcur->TxDelay),2);
+              sendPkt->payload=msgPayload;  
+              SendAllNeighbors(sendPkt);
+              free(sendPkt);
+            }
+
+            for(ROUT_TBL_DV *rcur2 = routTblDV;rcur2!=NULL;rcur2=rcur2->next){
+              if(rcur2->NextHop==pcur->id){                 
+              //if we use this node to get to this destination
+                rcur2->timestamp=sys->time();
+                rcur2->Distance= (rcur2->Distance)-costDiff;
+
+                if(costDiff<0){
+                  // if costDiff is negative, then send a DV update packet.
+                  PktDetail *sendPkt=new PktDetail();
+                  sendPkt->packet_type=DV;
+                  sendPkt->src_id=RouterID;
+                  sendPkt->size=8+4;
+                  char* msgPayload=(char*)malloc(4);
+                  memcpy(&msgPayload[0],&(rcur2->NextHop),2);
+                  memcpy(&msgPayload[2],&(rcur2->Distance),2);
+                  sendPkt->payload=msgPayload;  
+                  SendAllNeighbors(sendPkt);
+                  free(sendPkt);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  void RoutingProtocolImpl::updt_DV_RtTbl(unsigned short port, PktDetail *pkt, unsigned short size){
+    unsigned short sourceID = pkt->src_id;
+    unsigned short destNodeID = (unsigned short) ((pkt->payload)[0]);
+    unsigned short distance = (unsigned short) ((pkt->payload)[2]);
+
+    for(ROUT_TBL_DV *rcur = routTblDV;rcur!=NULL;rcur=rcur->next){
+      if(rcur->Destination==sourceID){
+        ROUT_TBL_DV *proxyEntry = rcur;
+        unsigned short potentialDistance = (proxyEntry->Distance) + distance;
+        
+        //bool foundDestInRoutTbl = false;
+        for(ROUT_TBL_DV *rcur2 = routTblDV;rcur2!=NULL;rcur=rcur2->next){
+          if(  (rcur2->Destination==destNodeID) ){
+            //foundDestInRoutTbl = true;
+            ROUT_TBL_DV *existingEntry = rcur2;
+
+            if(existingEntry->Distance<= potentialDistance){
+            }
+            else{
+              //want to re-rout to this new rout
+              existingEntry->NextHop=(proxyEntry->NextHop);                        //to do: incomplete
+              existingEntry->Distance=potentialDistance;
+              existingEntry->timestamp=sys->time();
+            }
+            
+          }
+        }
+
+        if(isNeighbor(destNodeID)){
+          for (PORT_STATUS *cur = portStatus;cur->next != NULL;cur=cur->next){
+            if (cur->id==destNodeID && cur->TxDelay<potentialDistance){
+              ROUT_TBL_DV *newEntry = new ROUT_TBL_DV();
+              newEntry->Destination=cur->id;  //destination id 
+              newEntry->NextHop=cur->port_num;      //next hop id
+              newEntry->Distance=cur->TxDelay;
+              newEntry->timestamp=sys->time();
+              newEntry->next = routTblDV; 
+
+              routTblDV=newEntry;
+            }
+          }
+        }
+      }
+    }
+  }
