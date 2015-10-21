@@ -38,22 +38,20 @@ void RoutingProtocolImpl::init(unsigned short num_ports, unsigned short router_i
   MakePortStatus(NumPorts,RouterID);
   MakeForwardingTable();
   
-  printf("setting alarms\n");
+  //setting alarms
 
-  // static eAlarmType port_status_alarm_type = ALARM_PORT_STATUS;
-  // (void) port_status_alarm_type;
-  //SetPortStatusAlarm(this, 10000, &port_status_alarm_type);//every 10 sec
-  //sys->set_alarm(this, 10000, &port_status_alarm_type);
-  
-  SetForwardingAlarm();//every 30 sec
+static eAlarmType alarm_frd = ALARM_FORWARDING;
+  (void) alarm_frd;
+  sys->set_alarm(this,30000,&alarm_frd);//every 30 sec
   
   static eAlarmType port_check_alarm_type = ALARM_PORT_CHECK;
   (void) port_check_alarm_type;
   //SetPortCheckAlarm(this, 1000, &port_check_alarm_type);//every 1 sec
   sys->set_alarm(this, 1000, &port_check_alarm_type);
   
-  SetForwardCheckAlarm();//every 1 sec
-  //printf("set alarms done.\n");
+  static eAlarmType alarm_frd_chk = ALARM_FORWARD_CHECK;
+  (void) alarm_frd_chk;
+  sys->set_alarm(this, 1000, &alarm_frd_chk);//every 1 sec
 }
 
   void RoutingProtocolImpl::InitPortStatus(unsigned short num_ports, unsigned short router_id){
@@ -77,34 +75,6 @@ void RoutingProtocolImpl::init(unsigned short num_ports, unsigned short router_i
     
 
     if (ProtocolType==P_DV){                      //Protocol for DV
-      /*
-      routTblDV = new ROUT_TBL_DV();              //Init the first element
-      
-      ROUT_TBL_DV *cur = routTblDV;
-
-      cur->Destination = RouterID;                //adds the first element
-      cur->NextHop=RouterID;
-      cur->Distance = 0;
-      cur->timestamp = sys->time();             
-      cur->next=new ROUT_TBL_DV();
-      cur = cur->next;
-
-      for(PORT_STATUS *curPortStat = portStatus;curPortStat!=NULL;curPortStat=curPortStat->next){
-        cur->Destination = curPortStat->id;
-        
-        if(curPortStat->TxDelay==INFINITY_COST){           //i.e. if the node is not a neighbor.
-          cur->NextHop=0;
-          cur->Distance = 0;
-        }
-        else{                                              //i.e. if the node is a neighbor
-          cur->NextHop=curPortStat->id;
-          cur->Distance = curPortStat->TxDelay;
-        }
-
-        cur->next=new ROUT_TBL_DV();                       // addes the next element at iter. the cur
-        cur = cur->next;
-      }
-      */
       
     }
     else{
@@ -131,36 +101,43 @@ void RoutingProtocolImpl::init(unsigned short num_ports, unsigned short router_i
   // }
   void RoutingProtocolImpl::SetForwardCheckAlarm(){}
 
+//handle alarm
 void RoutingProtocolImpl::handle_alarm(void *data) {
     eAlarmType convertedData = *(eAlarmType*) data;
-	//printf("handle alarm starts\n");
-	//printf("handle type %d \n",convertedData);
+  //printf("handle alarm starts\n");
+  //printf("handle type %d \n",convertedData);
     if(convertedData==ALARM_PORT_STATUS){
-		printf("handle port status alarm.\n");
-        HndAlm_PrtStat(NumPorts, RouterID);	
-		static eAlarmType port_status_alrm_type = ALARM_PORT_STATUS;
-		(void) port_status_alrm_type;
-		printf("setting port update alarm. router: %d\n", RouterID);
-		sys->set_alarm(this, 10000, &port_status_alrm_type);
+    //printf("handle port status alarm.\n");
+        HndAlm_PrtStat(NumPorts, RouterID); 
+    static eAlarmType port_status_alrm_type = ALARM_PORT_STATUS;
+    (void) port_status_alrm_type;
+    //printf("setting port update alarm. router: %d\n", RouterID);
+    sys->set_alarm(this, 10000, &port_status_alrm_type);
     }
     else if(convertedData == ALARM_FORWARDING){
         HndAlm_frd(); 
+    static eAlarmType alrm_frd = ALARM_FORWARDING;
+    (void) alrm_frd;
+    sys->set_alarm(this,30000,&alrm_frd);
     }
     else if(convertedData == ALARM_PORT_CHECK){
-		printf("handle port check alarm.\n");
-		HndAlm_PrtChk();
-		static eAlarmType port_check_alrm_type = ALARM_PORT_CHECK;
-		(void) port_check_alrm_type;
-		sys->set_alarm(this, 1000, &port_check_alrm_type);
+    //printf("handle port check alarm.\n");
+    HndAlm_PrtChk();
+    static eAlarmType port_check_alrm_type = ALARM_PORT_CHECK;
+    (void) port_check_alrm_type;
+    sys->set_alarm(this, 1000, &port_check_alrm_type);
     }  
     else if(convertedData == ALARM_FORWARD_CHECK){
         HndAlm_FrdChk();
+    static eAlarmType alrm_frd_chk = ALARM_FORWARD_CHECK;
+    (void) alrm_frd_chk;
+    sys->set_alarm(this, 1000, &alrm_frd_chk);
     }  
     else{
-        printf("This alarm type cannot be handled! \n");
+        //printf("This alarm type cannot be handled! \n");
     }       
-	
-    }
+  
+  }
 
   void RoutingProtocolImpl::HndAlm_PrtStat(unsigned short num_ports, unsigned short router_id){
 	printf("Handle alarm of port status.\n");

@@ -43,6 +43,8 @@ class RoutingProtocolImpl : public RoutingProtocol {
     };
 
     typedef struct pkt_detail_impl PktDetail;
+
+
     
 
     
@@ -74,12 +76,24 @@ class RoutingProtocolImpl : public RoutingProtocol {
         typedef struct RoutingTable_DV ROUT_TBL_DV;
 
 
-        //incomplete LS implementation
+        //LS Data Structures
         struct RoutingTable_LS{
-          struct RoutingTable_LS *next;    
+          int Destination;
+          int NextHop;
+          int Distance;
+          int timestamp;
+          unsigned int seqNum;
+          struct RoutingTable_LS *next;   
         };
-
         typedef struct RoutingTable_LS ROUT_TBL_LS;
+
+        struct Node_LS{
+          int id;
+          int Distance;
+          struct Node_LS *next;
+        };
+        typedef struct Node_LS NODE_LS;
+
             //Alarm type
         enum eAlarmType {
           ALARM_PORT_STATUS,
@@ -95,13 +109,21 @@ class RoutingProtocolImpl : public RoutingProtocol {
       Node *sys; // To store Node object; used to access GSR9999 interfaces
       PORT_STATUS *portStatus;
       ROUT_TBL_DV *routTblDV;
-      ROUT_TBL_LS *routTblLS;
+
       //Router ID
       unsigned short RouterID;
       //Protocol Type
       eProtocolType ProtocolType;
       //number of ports
       unsigned short NumPorts;
+
+      //LS data structures
+      ROUT_TBL_LS *routTblLS;
+      NODE_LS *frontier;
+      NODE_LS *neighbors;
+      NODE_LS *minDistNode;
+      NODE_LS *allKnownNodes;
+      unsigned int seqNumSelf;
     
     
     
