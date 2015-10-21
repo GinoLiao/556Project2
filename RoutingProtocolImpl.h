@@ -74,25 +74,12 @@ class RoutingProtocolImpl : public RoutingProtocol {
         typedef struct RoutingTable_DV ROUT_TBL_DV;
 
 
-        //LS Data Structures
+        //incomplete LS implementation
         struct RoutingTable_LS{
-          int Destination;
-          int NextHop;
-          int Distance;
-          int timestamp;
-          unsigned int seqNum;
-          struct RoutingTable_LS *next;   
+          struct RoutingTable_LS *next;    
         };
+
         typedef struct RoutingTable_LS ROUT_TBL_LS;
-
-        struct Node_LS{
-          int id;
-          int Distance;
-          struct Node_LS *next;
-        };
-        typedef struct Node_LS NODE_LS;
-
-
             //Alarm type
         enum eAlarmType {
           ALARM_PORT_STATUS,
@@ -108,14 +95,7 @@ class RoutingProtocolImpl : public RoutingProtocol {
       Node *sys; // To store Node object; used to access GSR9999 interfaces
       PORT_STATUS *portStatus;
       ROUT_TBL_DV *routTblDV;
-      //LS data structures
       ROUT_TBL_LS *routTblLS;
-      NODE_LS *frontier;
-      NODE_LS *neighbors;
-      NODE_LS *minDistNode;
-      NODE_LS *allKnownNodes;
-      unsigned int seqNumSelf;
-      
       //Router ID
       unsigned short RouterID;
       //Protocol Type
@@ -136,62 +116,24 @@ class RoutingProtocolImpl : public RoutingProtocol {
       void MakeForwardingTable();
       void SetPortStatusAlarm(RoutingProtocol *r, unsigned int duration, void *data);
       void SetForwardingAlarm();
-      //void SetPortCheckAlarm(RoutingProtocol *r, unsigned int duration, void *data);
-      //void SetForwardCheckAlarm();
+      void SetPortCheckAlarm(RoutingProtocol *r, unsigned int duration, void *data);
+      void SetForwardCheckAlarm();
       void HndAlm_PrtStat(unsigned short num_ports, unsigned short router_id);
       void HndAlm_frd();
       void HndAlm_PrtChk();
       void HndAlm_FrdChk();
-      void send_data(unsigned short port, PktDetail *pkt, char* buffer, unsigned short size);
+      void send_data(unsigned short port, PktDetail *pkt, unsigned short size);
       void send_pong(unsigned short port, char* packet, unsigned short size);
       void update_port_status(unsigned short port, PktDetail *pkt, unsigned short size);
-      void get_pkt_detail(void *pkt, PktDetail *pkt_d, unsigned short size);
-  	  void SendMsg(PktDetail* pkt_d, unsigned short portNum);
-  	  void NTOHS_message(char* buffer, unsigned short size);
-  	  void HTONS_message(char* buffer, unsigned short size);
-  	  void BufferConvHelper(char* buffer, unsigned short size,bool isNTOHS);
-  	  void SendAllNeighbors(PktDetail* pkt_d);
-
-      
-      
-      unsigned short findPortNumber(unsigned short neighborID);
-      bool isNeighbor(unsigned short routID);
-
-      //LS functions
-      void HndAlm_FrdChk_LS();
-      void send_data_LS(unsigned short port, PktDetail *pkt, char* buffer, unsigned short size);
-      void HndAlm_frd_LS();
-      void InitRoutingTable_LS();
-      void updt_LS_RtTbl(unsigned short port, PktDetail *pkt, unsigned short size);
-
-      void addEntriesToLSRoutingTable(PktDetail *pkt);
-      void removeFromFrontier(unsigned short remove_id);
-      void addToFrontier(PktDetail *pkt);
-      void forwardPacket(PktDetail *pkt);
-      void findMinInFrontier();
-      void flood_LS();
-
-
-
-      //DV functions
-      void HndAlm_FrdChk_DV();
-      void send_data_DV(unsigned short port, PktDetail *pkt, char* buffer, unsigned short size);
-      void InitRoutingTable_DV();
       void updt_DV_RtTbl(unsigned short port, PktDetail *pkt, unsigned short size);
-      void HndAlm_frd_DV();
+      void updt_LS_RtTbl(unsigned short port, PktDetail *pkt, unsigned short size);
+      void get_pkt_detail(void *pkt, PktDetail *pkt_d, unsigned short size);
+	  void SendMsg(PktDetail* pkt_d, unsigned short portNum);
+	  void NTOHS_message(char* buffer, unsigned short size);
+	  void HTONS_message(char* buffer, unsigned short size);
+	  void BufferConvHelper(char* buffer, unsigned short size,bool isNTOHS);
+	  void SendAllNeighbors(PktDetail* pkt_d);
 
-
-
-      
-      
-      
-      
-      
-      
-      
-      
-
-      
 
     
       
