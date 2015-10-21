@@ -25,7 +25,7 @@ RoutingProtocolImpl::~RoutingProtocolImpl() {
 
                 ////////////////////////////////////////////
                 //                                        //
-                //      IMPLEMENTED FUNCTIONS      //
+                //         IMPLEMENTED FUNCTIONS          //
                 //                                        //
                 ////////////////////////////////////////////
 void RoutingProtocolImpl::init(unsigned short num_ports, unsigned short router_id, eProtocolType protocol_type) {
@@ -134,9 +134,10 @@ void RoutingProtocolImpl::recv(unsigned short port, void *packet, unsigned short
 }
                 ////////////////////////////////////////////
                 //                                        //
-                //      PING PONG     //
+                //               PING PONG                //
                 //                                        //
                 ////////////////////////////////////////////
+//ZPINGPONG
 void RoutingProtocolImpl::InitPortStatus(unsigned short num_ports, unsigned short router_id){
   
     //loop over all other nodes, initialize port status 
@@ -290,10 +291,10 @@ void RoutingProtocolImpl::update_port_status(unsigned short port, PktDetail *pkt
 
                 ////////////////////////////////////////////
                 //                                        //
-                //      HELPER FUNCTIONS      //
+                //           HELPER FUNCTIONS             //
                 //                                        //
                 ////////////////////////////////////////////
-
+//ZHELP
 void RoutingProtocolImpl::get_pkt_detail(void *pkt, PktDetail *pkt_d, unsigned short size){
     //printf("%d %d\n", size, 1[(unsigned short*)pkt]);
       //printf("get pkt detail");
@@ -403,6 +404,7 @@ void RoutingProtocolImpl::get_pkt_detail(void *pkt, PktDetail *pkt_d, unsigned s
                 //      ROUTING PROTOCOL PARENT CODE      //
                 //                                        //
                 ////////////////////////////////////////////
+//ZPR
 
 void RoutingProtocolImpl::InitRoutingTable(){
   if (ProtocolType==P_DV){                      //Protocol for DV
@@ -495,7 +497,7 @@ void RoutingProtocolImpl::HndAlm_FrdChk_LS(){
                     //    ########          ####        //
                     //                                  // 
                     //////////////////////////////////////
-
+//ZLS
   void RoutingProtocolImpl::InitRoutingTable_LS(){
   //make a rounting table with cost to neighbors finite and non-neighbors infinite
   //set total number of nodes to itself+neighbors to S.  
@@ -756,7 +758,7 @@ void RoutingProtocolImpl::forwardPacket(PktDetail *pkt){
                     //    ########           ##         //
                     //                                  // 
                     //////////////////////////////////////
-  
+//ZDV
 
   void RoutingProtocolImpl::InitRoutingTable_DV(){
     routTblDV = new ROUT_TBL_DV();              //Init the first element
