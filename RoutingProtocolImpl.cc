@@ -25,21 +25,18 @@ RoutingProtocolImpl::~RoutingProtocolImpl() {
 
 
 
-                ////////////////////////////////////////////
-                //                                        //
-                //                PING PONG               //
-                //                                        //
-                ////////////////////////////////////////////
+
+
 void RoutingProtocolImpl::init(unsigned short num_ports, unsigned short router_id, eProtocolType protocol_type) {
-  //printf("Num of ports: %d, router ID: %d \n", num_ports, router_id);
+	//printf("Num of ports: %d, router ID: %d \n", num_ports, router_id);
   NumPorts=num_ports;
   RouterID = router_id;
   ProtocolType=protocol_type;
   //printf("initialization starts\n");
   InitPortStatus(NumPorts,RouterID);
-  InitRoutingTable();
+  //InitRoutingTable();
   MakePortStatus(NumPorts,RouterID);
-  MakeForwardingTable();
+  //MakeForwardingTable();
   
   //printf("setting alarms\n");
 
@@ -48,158 +45,240 @@ void RoutingProtocolImpl::init(unsigned short num_ports, unsigned short router_i
   //SetPortStatusAlarm(this, 10000, &port_status_alarm_type);//every 10 sec
   //sys->set_alarm(this, 10000, &port_status_alarm_type);
   
- 
-  
-  //setting alarms
-
-  static eAlarmType alarm_frd = ALARM_FORWARDING;
-  (void) alarm_frd;
-  sys->set_alarm(this,30000,&alarm_frd);//every 30 sec
+  // static eAlarmType alarm_frd = ALARM_FORWARDING;
+  // (void) alarm_frd;
+  // sys->set_alarm(this,30000,&alarm_frd);//every 30 sec
   
   static eAlarmType port_check_alarm_type = ALARM_PORT_CHECK;
   (void) port_check_alarm_type;
   //SetPortCheckAlarm(this, 1000, &port_check_alarm_type);//every 1 sec
   sys->set_alarm(this, 1000, &port_check_alarm_type);
   
-  static eAlarmType alarm_frd_chk = ALARM_FORWARD_CHECK;
-  (void) alarm_frd_chk;
-  sys->set_alarm(this, 1000, &alarm_frd_chk);//every 1 sec
-
-
-  
-  //printf("set alarms done.\n");
+  // static eAlarmType alarm_frd_chk = ALARM_FORWARD_CHECK;
+  // (void) alarm_frd_chk;
+  // sys->set_alarm(this, 1000, &alarm_frd_chk);//every 1 sec
+  // printf("set alarms done.\n");
 }
-void RoutingProtocolImpl::InitPortStatus(unsigned short num_ports, unsigned short router_id){
-  
+
+  void RoutingProtocolImpl::InitPortStatus(unsigned short num_ports, unsigned short router_id){
+	
     //loop over all other nodes, initialize port status 
     portStatus = new PORT_STATUS();
-  PORT_STATUS *cur = portStatus;
+	PORT_STATUS *cur = portStatus;
     //printf("init port status.\n");
-  for(unsigned short i=0; i < num_ports;i++){
-    //printf("Num of ports: %d, router ID: %d \n", num_ports, router_id);
-        cur->id = 0;
-    cur->port_num = i;
+	for(unsigned short i=0; i < num_ports;i++){
+		//printf("Num of ports: %d, router ID: %d \n", num_ports, router_id);
+       	cur->id = 0;
+		cur->port_num = i;
         cur->timestamp = sys->time();
-        cur->TxDelay = INFINITY_COST; //set to inifinity
+        cur->TxDelay = INFINITY_COST;	//set to inifinity
         cur->next = new PORT_STATUS();
-    cur = cur->next;
+		cur = cur->next;
     }    
+  }
+  
+ void RoutingProtocolImpl::InitRoutingTable(){
+  if (ProtocolType==P_DV){                      //Protocol for DV
+    InitRoutingTable_DV();
+  }
+  else{
+    InitRoutingTable_LS();
+  }
 }
+  /*
+  	send ping to update port status with neighbors' delays
+  */
+  void RoutingProtocolImpl::MakePortStatus(unsigned short num_ports, unsigned short router_id){
+		eAlarmType alarm_type = ALARM_PORT_STATUS;
+		(void) alarm_type;
+		handle_alarm(&alarm_type);
+      }
 
-void RoutingProtocolImpl::MakePortStatus(unsigned short num_ports, unsigned short router_id){
-    eAlarmType alarm_type = ALARM_PORT_STATUS;
-    (void) alarm_type;
-    handle_alarm(&alarm_type);
-}
+  void RoutingProtocolImpl::MakeForwardingTable(){}
+  // void RoutingProtocolImpl::SetPortStatusAlarm(RoutingProtocol *r, unsigned int duration, void *data){
+	// sys->set_alarm(r, duration, data);
+	  
+  // }
+  void RoutingProtocolImpl::SetForwardingAlarm(){}
+  // void RoutingProtocolImpl::SetPortCheckAlarm(RoutingProtocol *r, unsigned int duration, void *data){
+	// sys->set_alarm(r, duration, data);  
+  // }
+  void RoutingProtocolImpl::SetForwardCheckAlarm(){}
 
 void RoutingProtocolImpl::handle_alarm(void *data) {
     eAlarmType convertedData = *(eAlarmType*) data;
-  //printf("handle alarm starts\n");
-  //printf("handle type %d \n",convertedData);
+	//printf("handle alarm starts\n");
+	//printf("handle type %d \n",convertedData);
     if(convertedData==ALARM_PORT_STATUS){
-    //printf("handle port status alarm.\n");
-        HndAlm_PrtStat(NumPorts, RouterID); 
-    static eAlarmType port_status_alrm_type = ALARM_PORT_STATUS;
-    (void) port_status_alrm_type;
-    //printf("setting port update alarm. router: %d\n", RouterID);
-    sys->set_alarm(this, 10000, &port_status_alrm_type);
+		//printf("handle port status alarm.\n");
+        HndAlm_PrtStat(NumPorts, RouterID);	
+		static eAlarmType port_status_alrm_type = ALARM_PORT_STATUS;
+		(void) port_status_alrm_type;
+		//printf("setting port update alarm. router: %d\n", RouterID);
+		sys->set_alarm(this, 10000, &port_status_alrm_type);
     }
     else if(convertedData == ALARM_FORWARDING){
         HndAlm_frd(); 
-    static eAlarmType alrm_frd = ALARM_FORWARDING;
-    (void) alrm_frd;
-    sys->set_alarm(this,30000,&alrm_frd);
+		static eAlarmType alrm_frd = ALARM_FORWARDING;
+		(void) alrm_frd;
+		sys->set_alarm(this,30000,&alrm_frd);
     }
     else if(convertedData == ALARM_PORT_CHECK){
-    //printf("handle port check alarm.\n");
-    HndAlm_PrtChk();
-    static eAlarmType port_check_alrm_type = ALARM_PORT_CHECK;
-    (void) port_check_alrm_type;
-    sys->set_alarm(this, 1000, &port_check_alrm_type);
+		//printf("handle port check alarm.\n");
+		HndAlm_PrtChk();
+		static eAlarmType port_check_alrm_type = ALARM_PORT_CHECK;
+		(void) port_check_alrm_type;
+		sys->set_alarm(this, 1000, &port_check_alrm_type);
     }  
     else if(convertedData == ALARM_FORWARD_CHECK){
         HndAlm_FrdChk();
-    static eAlarmType alrm_frd_chk = ALARM_FORWARD_CHECK;
-    (void) alrm_frd_chk;
-    sys->set_alarm(this, 1000, &alrm_frd_chk);
+		static eAlarmType alrm_frd_chk = ALARM_FORWARD_CHECK;
+		(void) alrm_frd_chk;
+		sys->set_alarm(this, 1000, &alrm_frd_chk);
     }  
     else{
         //printf("This alarm type cannot be handled! \n");
     }       
-  
+	
   }
 
-void RoutingProtocolImpl::HndAlm_PrtStat(unsigned short num_ports, unsigned short router_id){
-  //printf("Handle alarm of port status.\n");
-  //printf("Num of ports: %d, router ID: %d \n", num_ports, router_id);
-  for(unsigned short i=0;i<num_ports;i++){
-    //printf("num ports: %d \n", num_ports);
-    unsigned short msgsize = 12;
-    char* buffer = (char*) malloc(msgsize);
-    //cout<<"buffer: "<<strlen(buffer)<<endl;
-    //cout<<"pkt size "<<pkt_d->size<<endl;
-    ePacketType pkt_type = PING;
-    //cout<<"pkt_detail type: "<<pkt_type<<endl;
-    memcpy(&buffer[0], &pkt_type, 1);
-    //cout<< "pkt type: "<<(int)buffer[0]<<endl;
-    unsigned short msgsizeNet = htons(msgsize);
-    //cout<<"size: "<<msgsize<<endl;
-    //cout<<"msgsizeNet: "<< msgsizeNet<<endl;
-    //cout<<"msgsizeHost: "<< ntohs(msgsizeNet)<<endl;
-    memcpy(&buffer[2], &msgsizeNet, 2);
-    unsigned short srcID = router_id;
-    unsigned short srcIDNet = htons(srcID);
-    //cout<<"src id "<<srcID<<endl;
-    //cout<<"src id Net "<<srcIDNet<<endl;
-    memcpy(&buffer[4], &srcIDNet, 2);
-    unsigned int time = sys->time();
-    //cout<<"time:"<<time<<endl;
-    //char* msgPayload = (char *) malloc(4);
-    //memcpy(&msgPayload,&time,4);
-    memcpy(&buffer[8], &time, 4);
-    //printf("! %x %d\n", buffer+8, (unsigned int&)buffer[8]);
-    //cout<<"msgPayload "<<(unsigned int *)(msgPayload)<<endl;
-    //cout<<"buffer: "<<strlen(buffer)<<endl;
-    //cout<<"buffer Net: "<<strlen(buffer)<<endl;
-    //cout<<"before sys send"<<endl;
-    //cout<<"msg size: "<<msgsize<<endl;
-    //cout<< "pkt type: "<<(int)buffer[0]<<endl;
-    PktDetail *pkt= new PktDetail();
-    pkt->packet_type = (unsigned short)PING;
-    pkt->size = msgsize;
-    pkt->src_id = router_id;
-    pkt->payload = (char *)malloc(4);
-    memcpy(&pkt->payload, &time,4);
-    //printf("pkt type %d\n",*(unsigned int*)&pkt->packet_type);
-    //printf("pkt src id %d\n",*(unsigned int*)&pkt->src_id);
-    //printf("pkt size %d\n",*(unsigned int*)&pkt->size);
-    //printf("payload time %d\n",*(unsigned int*)&pkt->payload);
-    SendMsg(pkt,i);
-    //sys->send(i,buffer,msgsize);
+  void RoutingProtocolImpl::HndAlm_PrtStat(unsigned short num_ports, unsigned short router_id){
+	//printf("Handle alarm of port status.\n");
+	//printf("Num of ports: %d, router ID: %d \n", num_ports, router_id);
+	for(unsigned short i=0;i<num_ports;i++){
+		//printf("num ports: %d \n", num_ports);
+		unsigned short msgsize = 12;
+		char* buffer = (char*) malloc(msgsize);
+		//cout<<"buffer: "<<strlen(buffer)<<endl;
+		//cout<<"pkt size "<<pkt_d->size<<endl;
+		ePacketType pkt_type = PING;
+		//cout<<"pkt_detail type: "<<pkt_type<<endl;
+		memcpy(&buffer[0], &pkt_type, 1);
+		//cout<< "pkt type: "<<(int)buffer[0]<<endl;
+		unsigned short msgsizeNet = htons(msgsize);
+		//cout<<"size: "<<msgsize<<endl;
+		//cout<<"msgsizeNet: "<< msgsizeNet<<endl;
+		//cout<<"msgsizeHost: "<< ntohs(msgsizeNet)<<endl;
+		memcpy(&buffer[2], &msgsizeNet, 2);
+		unsigned short srcID = router_id;
+		unsigned short srcIDNet = htons(srcID);
+		//cout<<"src id "<<srcID<<endl;
+		//cout<<"src id Net "<<srcIDNet<<endl;
+		memcpy(&buffer[4], &srcIDNet, 2);
+		unsigned int time = sys->time();
+		//cout<<"time:"<<time<<endl;
+		//char* msgPayload = (char *) malloc(4);
+		//memcpy(&msgPayload,&time,4);
+		memcpy(&buffer[8], &time, 4);
+		//printf("! %x %d\n", buffer+8, (unsigned int&)buffer[8]);
+		//cout<<"msgPayload "<<(unsigned int *)(msgPayload)<<endl;
+		//cout<<"buffer: "<<strlen(buffer)<<endl;
+		//cout<<"buffer Net: "<<strlen(buffer)<<endl;
+		//cout<<"before sys send"<<endl;
+		//cout<<"msg size: "<<msgsize<<endl;
+		//cout<< "pkt type: "<<(int)buffer[0]<<endl;
+		PktDetail *pkt= new PktDetail();
+		pkt->packet_type = (unsigned short)PING;
+		pkt->size = msgsize;
+		pkt->src_id = router_id;
+		pkt->payload = (char *)malloc(4);
+		memcpy(&pkt->payload, &time,4);
+		//printf("pkt type %d\n",*(unsigned int*)&pkt->packet_type);
+		//printf("pkt src id %d\n",*(unsigned int*)&pkt->src_id);
+		//printf("pkt size %d\n",*(unsigned int*)&pkt->size);
+		//printf("payload time %d\n",*(unsigned int*)&pkt->payload);
+		SendMsg(pkt,i);
+		//sys->send(i,buffer,msgsize);
+	}
   }
+  
+  void RoutingProtocolImpl::HndAlm_frd(){
+	if (ProtocolType==P_DV){                      //Protocol for DV
+		HndAlm_frd_DV();
   }
+	else{
+		HndAlm_frd_LS();
+  }
+}
 
 void RoutingProtocolImpl::HndAlm_PrtChk(){
-//printf("Handle alarm port check \n");
-  int currentTime = sys->time();
-  //int currentTime = 1000;
-  int lateTime = 15000;
-  for(PORT_STATUS *cur=portStatus;cur->next != NULL;cur=cur->next){
-  //printf("time after last update:%d \n", currentTime-cur->timestamp);
-    if(  (currentTime-cur->timestamp)  >lateTime){
-      if(cur==portStatus){            //ie the current first element 
-        PORT_STATUS *deleteElt=portStatus;
-        portStatus=portStatus->next;
-        free(deleteElt);
+	//printf("Handle alarm port check \n");
+    int currentTime = sys->time();
+    //int currentTime = 1000;
+    int lateTime = 15000;
+    for(PORT_STATUS *cur=portStatus;cur->next != NULL;cur=cur->next){
+		//printf("time after last update:%d \n", currentTime-cur->timestamp);
+      if(  (currentTime-cur->timestamp)  >lateTime){
+        if(cur==portStatus){            //ie the current first element 
+          PORT_STATUS *deleteElt=portStatus;
+          portStatus=portStatus->next;
+          free(deleteElt);
+        }
+        else{                           //the element is not first
+          PORT_STATUS *deleteElt=cur;
+          cur=cur->next;
+          free(deleteElt);
+        }
       }
-      else{                           //the element is not first
-        PORT_STATUS *deleteElt=cur;
-        cur=cur->next;
-        free(deleteElt);
-      }
-    }
-  }    
-}
+    }    
+  }
+  void RoutingProtocolImpl::HndAlm_FrdChk(){
+	if (ProtocolType==P_DV){                      //Protocol for DV
+		HndAlm_FrdChk_DV();
+	}
+	else{
+		HndAlm_FrdChk_LS();
+	}
+  }
+  
+  void RoutingProtocolImpl::HndAlm_FrdChk_DV(){
+	  printf("handle fwd chk dv\n");
+	  int currentTime = sys->time();
+	  int lateTime = 30000;
+	  for(ROUT_TBL_DV *cur=routTblDV;cur->next != NULL;cur=cur->next){
+		  printf("1\n");
+		if(  (currentTime-cur->timestamp)  >lateTime){
+		  if(cur==routTblDV){            //ie the current first element 
+			ROUT_TBL_DV *deleteElt=routTblDV;
+			routTblDV=routTblDV->next;
+			free(deleteElt);
+		  }
+		  else{                           //the element is not first
+			ROUT_TBL_DV *deleteElt=cur;
+			cur=cur->next;
+			free(deleteElt);
+		  }
+		}
+	  }   
+	  printf("done\n");	  
+  }
+  
+  void RoutingProtocolImpl::HndAlm_FrdChk_LS(){
+	  int currentTime = sys->time();
+	  int lateTime = 30000;
+	  for(ROUT_TBL_LS *cur=routTblLS;cur->next != NULL;cur=cur->next){
+		if(  (currentTime-cur->timestamp)  >lateTime){
+		  if(cur==routTblLS){            //ie the current first element 
+			ROUT_TBL_LS *deleteElt=routTblLS;
+			routTblLS=routTblLS->next;
+			free(deleteElt);
+		  }
+		  else{                           //the element is not first
+			ROUT_TBL_LS *deleteElt=cur;
+			cur=cur->next;
+			free(deleteElt);
+		  }
+		}
+	  }  
+  }
+
+
+
+
+  
+
+
+
 
 void RoutingProtocolImpl::recv(unsigned short port, void *packet, unsigned short size) {
   // add your own code
@@ -220,7 +299,7 @@ void RoutingProtocolImpl::recv(unsigned short port, void *packet, unsigned short
   // printf("dest id in recv: %d \n", pkt->dest_id);
   // printf("payload in recv: %d \n", *(int *)&pkt->payload);
   if(pkt->packet_type == DATA) {
-         send_data(port, pkt,(char *)packet, size);
+         send_data(port, pkt, (char *)packet, size);
   }
   else if(pkt->packet_type== PING){
         send_pong(port, (char *)packet, size);
@@ -241,18 +320,51 @@ void RoutingProtocolImpl::recv(unsigned short port, void *packet, unsigned short
    
 }
 
+
+
+
+ void RoutingProtocolImpl::send_data(unsigned short port, PktDetail *pkt, char* buffer, unsigned short size){
+  if (ProtocolType==P_DV){                      //Protocol for DV
+    send_data_DV(port,pkt,buffer,size);
+  }
+  else{
+    send_data_LS(port,pkt,buffer,size);
+  }
+}
+
+  void RoutingProtocolImpl::send_pong(unsigned short port, char *buffer, unsigned short size){
+       //char *buffer= (char *) packet;
+       // char type = *(char *)buffer;
+	   //printf("in send pong\n");
+        unsigned short src_id = ntohs(*(unsigned short *) (buffer + 4));
+		//printf("src id %d\n", src_id);
+        //unsigned short dest_id = ntohs(*(unsigned short *) (buffer + sizeof(int) + sizeof(unsigned short)));
+       // *(char *)buffer=2;
+        ePacketType PongPktType = PONG;
+        memcpy(&buffer[0],&PongPktType,1);
+        //memcpy(buffer, PONG, 1);
+        unsigned short srcIDNet = htons(RouterID);
+		memcpy(&buffer[4],&srcIDNet,2);
+        unsigned short destIDNet = htons(src_id);
+		memcpy(&buffer[6],&destIDNet,2);
+		//printf("pong pkt type: %d\n", (int) PongPktType);
+		//printf("src ID: %d \n",RouterID);
+		//printf("dest ID: %d\n",src_id);
+        sys->send(port, buffer, size);
+      }
+
 void RoutingProtocolImpl::update_port_status(unsigned short port, PktDetail *pkt, unsigned short size){
-  //printf("in update port status \n");
+	//printf("in update port status \n");
     unsigned short destID = pkt->dest_id;
-  //printf("dest id %d \n",destID);
+	//printf("dest id %d \n",destID);
     bool foundport = false;
     unsigned int timeDifference = (sys->time())  -  *(unsigned int*)&pkt->payload;
-  //printf("systime %d  pkttime  %d   delay %d \n",sys->time(),*(unsigned int*)&pkt->payload,timeDifference);
-  
+	//printf("systime %d  pkttime  %d   delay %d \n",sys->time(),*(unsigned int*)&pkt->payload,timeDifference);
+	
     for (PORT_STATUS *cur = portStatus;cur->next != NULL;cur=cur->next){
-      //printf("port num %d, port %d \n", cur->port_num, port);
+			//printf("port num %d, port %d \n", cur->port_num, port);
             if(cur->port_num==port){
-        //printf("found port\n");
+				//printf("found port\n");
               cur->timestamp=sys->time();
               cur->id=destID;
               cur->TxDelay=timeDifference;
@@ -274,473 +386,120 @@ void RoutingProtocolImpl::update_port_status(unsigned short port, PktDetail *pkt
     }
 
   }
-
-void RoutingProtocolImpl::send_pong(unsigned short port, char *buffer, unsigned short size){
-       //char *buffer= (char *) packet;
-       // char type = *(char *)buffer;
-     //printf("in send pong\n");
-        unsigned short src_id = ntohs(*(unsigned short *) (buffer + 4));
-    //printf("src id %d\n", src_id);
-        //unsigned short dest_id = ntohs(*(unsigned short *) (buffer + sizeof(int) + sizeof(unsigned short)));
-       // *(char *)buffer=2;
-        ePacketType PongPktType = PONG;
-        memcpy(&buffer[0],&PongPktType,1);
-        //memcpy(buffer, PONG, 1);
-        unsigned short srcIDNet = htons(RouterID);
-    memcpy(&buffer[4],&srcIDNet,2);
-        unsigned short destIDNet = htons(src_id);
-    memcpy(&buffer[6],&destIDNet,2);
-    //printf("pong pkt type: %d\n", (int) PongPktType);
-    //printf("src ID: %d \n",RouterID);
-    //printf("dest ID: %d\n",src_id);
-        sys->send(port, buffer, size);
-      }
-
-                ////////////////////////////////////////////
-                //                                        //
-                //            HELPER FUNCTIONS            //
-                //                                        //
-                ////////////////////////////////////////////
-unsigned short RoutingProtocolImpl::findPortNumber(unsigned short neighborID){
-  for (PORT_STATUS *cur = portStatus;cur->next != NULL;cur=cur->next){
-      if(cur->id==neighborID){
-        return cur-> port_num;
-      }
+  
+  void RoutingProtocolImpl::updt_LS_RtTbl(unsigned short port, PktDetail *pkt, unsigned short size){}
+  void RoutingProtocolImpl::get_pkt_detail(void *pkt, PktDetail *pkt_d, unsigned short size){
+	  //printf("%d %d\n", size, 1[(unsigned short*)pkt]);
+	    //printf("get pkt detail");
+	    //char *pkt_copy={0};
+	    char *pkt_copy = (char *) pkt;
+	    //*pkt_copy = ntohs(*(char*) pkt);
+		//*pkt_copy = *(char*) pkt;
+		//NTOHS_message(pkt_copy,size);
+		memcpy(&pkt_d->packet_type,&pkt_copy[0],1);//packetType
+		//printf("pkt_d->packet_type: %d\n", pkt_d->packet_type);
+		//memcpy(&size,&pkt_copy[2],2);
+		unsigned short sizeNet = *(unsigned short*)(pkt_copy+2);
+		//memcpy(&sizeNet,&pkt_copy[2],2);//size
+		pkt_d->size = ntohs(sizeNet);
+		//printf("pkt_d->size: %d\n", pkt_d->size);
+		unsigned short srcIDNet = *(unsigned short*)(pkt_copy+4);
+		pkt_d->src_id = ntohs(srcIDNet);//srcID
+		//printf("pkt_d->src id: %d\n", pkt_d->src_id);
+		unsigned short destIDNet = *(unsigned short*)(pkt_copy+6);
+		pkt_d->dest_id = ntohs(destIDNet);//DestID
+		//printf("pkt_d->dest id: %d\n", pkt_d->dest_id);
+		//unsigned int time = *(unsigned int*)(pkt_copy+8);
+		//printf("%x %d\n", pkt_copy+8, time);
+		//printf("time: %d\n", time);
+		//while(1);
+		pkt_d->payload = (char *)malloc(size-8);
+		for(int i=0; i<size-8;i+=4){
+			unsigned int payloadTempNet;
+			memcpy(&payloadTempNet,&pkt_copy[8+i],4);
+			unsigned int payloadTempHost = ntohl(payloadTempNet);
+			//printf("payload temp host %d\n", payloadTempHost);
+			memcpy(&pkt_d->payload+i,&payloadTempHost,4);//payload
+		}
+		//printf("pkt_d->payload: %d\n", *(int *)&pkt_d->payload);
+		/*pkt->packet_type = get_pkt_type(*packet);
+		pkt->src_id = get_src_id(*packet);
+		pkt->dest_id = get_dest_id(*packet);
+		pkt->size = size;*/
+		//get payload
+		//return pkt;
   }
-  return 0;
-}
-bool RoutingProtocolImpl::isNeighbor(unsigned short routID){
-    for (PORT_STATUS *cur = portStatus;cur->next != NULL;cur=cur->next){
-        if(cur->id==routID){
-          return true;
-        }
-    }
-    return false;
-}
-void RoutingProtocolImpl::SendMsg(PktDetail* pkt_d, unsigned short portNum){
-    //cout<<"in send msg"<<endl;
+//test Github desktop
+
+  void RoutingProtocolImpl::SendAllNeighbors(PktDetail* pkt_d){
+	  for(PORT_STATUS *pcur = portStatus;pcur!=NULL;pcur=pcur->next){
+	    SendMsg(pkt_d,pcur->port_num);
+	  }
+  }
+  
+  void RoutingProtocolImpl::SendMsg(PktDetail* pkt_d, unsigned short portNum){
+	//cout<<"in send msg"<<endl;
     char* buffer = (char*) malloc(pkt_d->size);
-    ePacketType pkt_type = (ePacketType)pkt_d->packet_type;
-    //cout<<"pkt_detail type "<<pkt_type<<endl;
+	ePacketType pkt_type = (ePacketType)pkt_d->packet_type;
+	//cout<<"pkt_detail type "<<pkt_type<<endl;
     memcpy(&buffer[0], &pkt_type, 1);
     unsigned short msgsize = pkt_d->size;
-    unsigned short msgsizeNet = htons(msgsize);
-    //cout<<"msgsize: "<< msgsize<<endl;
+	unsigned short msgsizeNet = htons(msgsize);
+	//cout<<"msgsize: "<< msgsize<<endl;
     memcpy(&buffer[2], &msgsizeNet, 2);
     unsigned short srcID = pkt_d->src_id;
-    unsigned short srcIDNet = htons(srcID);
+	unsigned short srcIDNet = htons(srcID);
     //cout<<"src id "<<pkt_d->src_id<<endl;
-    memcpy(&buffer[4], &srcIDNet, 2);
+	memcpy(&buffer[4], &srcIDNet, 2);
     unsigned short destID = pkt_d->dest_id;
-    unsigned short destIDNet = htons(destID);
-    //cout<<"dest id "<<pkt_d->dest_id<<endl;
+	unsigned short destIDNet = htons(destID);
+	//cout<<"dest id "<<pkt_d->dest_id<<endl;
     memcpy(&buffer[6], &destIDNet, 2);
-    char* msgPayload = (char *) malloc(msgsize-8);
+	char* msgPayload = (char *) malloc(msgsize-8);
     memcpy(&msgPayload,&(pkt_d->payload),4);
-    //printf("msgPayload %d\n",*(int*)&msgPayload);
-    //cout<<"payload "<<(unsigned int *)(pkt_d->payload)<<endl;
-    for(int i=0; i<msgsize-8;i=i+4){
-        unsigned int msgPayloadTemp;
-        memcpy(&msgPayloadTemp, &msgPayload+i, 4);
-        unsigned int msgPayloadTempNet = htonl(msgPayloadTemp);
-        memcpy(&buffer[8+i], &msgPayloadTempNet, 4);
-        //printf("msgPayload temp %d\n",(msgPayloadTemp));
-    }
+	//printf("msgPayload %d\n",*(int*)&msgPayload);
+	//cout<<"payload "<<(unsigned int *)(pkt_d->payload)<<endl;
+	for(int i=0; i<msgsize-8;i=i+4){
+		unsigned int msgPayloadTemp;
+		memcpy(&msgPayloadTemp, &msgPayload+i, 4);
+		unsigned int msgPayloadTempNet = htonl(msgPayloadTemp);
+		memcpy(&buffer[8+i], &msgPayloadTempNet, 4);
+		//printf("msgPayload temp %d\n",(msgPayloadTemp));
+	}
     //cout<<"buffer: "<<strlen(buffer)<<endl;
-    //HTONS_message(buffer,msgsize);
-    //cout<<"buffer Net: "<<strlen(buffer)<<endl;
-    //cout<<"before sys send"<<endl;
-    //cout<<"msg size: "<<msgsize<<endl;
+	//HTONS_message(buffer,msgsize);
+	//cout<<"buffer Net: "<<strlen(buffer)<<endl;
+	//cout<<"before sys send"<<endl;
+	//cout<<"msg size: "<<msgsize<<endl;
     sys->send(portNum,buffer,msgsize);
 
   }
-
-    void RoutingProtocolImpl::SendAllNeighbors(PktDetail* pkt_d){
-      for(PORT_STATUS *pcur = portStatus;pcur!=NULL;pcur=pcur->next){
-        SendMsg(pkt_d,pcur->port_num);
-      }
-  }
-
-  void RoutingProtocolImpl::get_pkt_detail(void *pkt, PktDetail *pkt_d, unsigned short size){
-      //printf("%d %d\n", size, 1[(unsigned short*)pkt]);
-        //printf("get pkt detail");
-        //char *pkt_copy={0};
-        char *pkt_copy = (char *) pkt;
-        //*pkt_copy = ntohs(*(char*) pkt);
-        //*pkt_copy = *(char*) pkt;
-        //NTOHS_message(pkt_copy,size);
-        memcpy(&pkt_d->packet_type,&pkt_copy[0],1);//packetType
-        //printf("pkt_d->packet_type: %d\n", pkt_d->packet_type);
-        //memcpy(&size,&pkt_copy[2],2);
-        unsigned short sizeNet = *(unsigned short*)(pkt_copy+2);
-        //memcpy(&sizeNet,&pkt_copy[2],2);//size
-        pkt_d->size = ntohs(sizeNet);
-        //printf("pkt_d->size: %d\n", pkt_d->size);
-        unsigned short srcIDNet = *(unsigned short*)(pkt_copy+4);
-        pkt_d->src_id = ntohs(srcIDNet);//srcID
-        //printf("pkt_d->src id: %d\n", pkt_d->src_id);
-        unsigned short destIDNet = *(unsigned short*)(pkt_copy+6);
-        pkt_d->dest_id = ntohs(destIDNet);//DestID
-        //printf("pkt_d->dest id: %d\n", pkt_d->dest_id);
-        //unsigned int time = *(unsigned int*)(pkt_copy+8);
-        //printf("%x %d\n", pkt_copy+8, time);
-        //printf("time: %d\n", time);
-        //while(1);
-        pkt_d->payload = (char *)malloc(size-8);
-        for(int i=0; i<size-8;i+=4){
-            unsigned int payloadTempNet;
-            memcpy(&payloadTempNet,&pkt_copy[8+i],4);
-            unsigned int payloadTempHost = ntohl(payloadTempNet);
-            //printf("payload temp host %d\n", payloadTempHost);
-            memcpy(&pkt_d->payload+i,&payloadTempHost,4);//payload
-        }
-        //printf("pkt_d->payload: %d\n", *(int *)&pkt_d->payload);
-        /*pkt->packet_type = get_pkt_type(*packet);
-        pkt->src_id = get_src_id(*packet);
-        pkt->dest_id = get_dest_id(*packet);
-        pkt->size = size;*/
-        //get payload
-        //return pkt;
-  }
-
-
-                ////////////////////////////////////////////
-                //                                        //
-                //      ROUTING PROTOCOL PARENT CODE      //
-                //                                        //
-                ////////////////////////////////////////////
-void RoutingProtocolImpl::InitRoutingTable(){
-  if (ProtocolType==P_DV){                      //Protocol for DV
-    InitRoutingTable_DV();
-  }
-  else{
-    InitRoutingTable_LS();
-  }
-}
-void RoutingProtocolImpl::send_data(unsigned short port, PktDetail *pkt, char* buffer, unsigned short size){
-  if (ProtocolType==P_DV){                      //Protocol for DV
-    send_data_DV(port,pkt,buffer,size);
-  }
-  else{
-    send_data_LS(port,pkt,buffer,size);
-  }
-}
-void RoutingProtocolImpl::HndAlm_frd(){
-  if (ProtocolType==P_DV){                      //Protocol for DV
-    HndAlm_frd_DV();
-  }
-  else{
-    HndAlm_frd_LS();
-  }
-}
-void RoutingProtocolImpl::HndAlm_FrdChk(){
-  if (ProtocolType==P_DV){                      //Protocol for DV
-    HndAlm_FrdChk_DV();
-  }
-  else{
-    HndAlm_FrdChk_LS();
-  }
-}
-void RoutingProtocolImpl::HndAlm_FrdChk_DV(){
-  int currentTime = sys->time();
-  int lateTime = 30000;
-  for(ROUT_TBL_DV *cur=routTblDV;cur->next != NULL;cur=cur->next){
-    if(  (currentTime-cur->timestamp)  >lateTime){
-      if(cur==routTblDV){            //ie the current first element 
-        ROUT_TBL_DV *deleteElt=routTblDV;
-        routTblDV=routTblDV->next;
-        free(deleteElt);
-      }
-      else{                           //the element is not first
-        ROUT_TBL_DV *deleteElt=cur;
-        cur=cur->next;
-        free(deleteElt);
-      }
-    }
-  }    
-}
-void RoutingProtocolImpl::HndAlm_FrdChk_LS(){
-  int currentTime = sys->time();
-  int lateTime = 30000;
-  for(ROUT_TBL_LS *cur=routTblLS;cur->next != NULL;cur=cur->next){
-    if(  (currentTime-cur->timestamp)  >lateTime){
-      if(cur==routTblLS){            //ie the current first element 
-        ROUT_TBL_LS *deleteElt=routTblLS;
-        routTblLS=routTblLS->next;
-        free(deleteElt);
-      }
-      else{                           //the element is not first
-        ROUT_TBL_LS *deleteElt=cur;
-        cur=cur->next;
-        free(deleteElt);
-      }
-    }
-  }  
-}
-
-void RoutingProtocolImpl::MakeForwardingTable(){}
-
-
-
-
-
-                    //////////////////////////////////////
-                    //                                  //
-                    //    ###               ####        //
-                    //    ###             ##    ##      //
-                    //    ###              ##           //
-                    //    ###                ##         //
-                    //    ###                  ##       //
-                    //    ########        ##    ##      //
-                    //    ########          ####        //
-                    //                                  // 
-                    //////////////////////////////////////
-void RoutingProtocolImpl::InitRoutingTable_LS(){
-  //make a rounting table with cost to neighbors finite and non-neighbors infinite
-  //set total number of nodes to itself+neighbors to S.  
-  //make a link list of frontier nodes.
   
-  routTblLS=NULL;
-  frontier=NULL;
-  for(PORT_STATUS *cur=portStatus;cur!=NULL;cur=cur->next){
-    if(cur->TxDelay!=INFINITY_COST){
-      ROUT_TBL_LS *addRout = new ROUT_TBL_LS();
-      addRout->Destination=cur->id;
-      addRout->NextHop=cur->port_num;
-      addRout->timestamp=sys->time();
-      addRout->Distance=cur->TxDelay;
-      addRout->seqNum=0;
-      
-      NODE_LS *addfrontier = new NODE_LS();
-      addfrontier->id=cur->id;
-      addfrontier->Distance=cur->TxDelay;
-
-      //config the add elts
-
-      addRout->next=routTblLS;
-      routTblLS=addRout;
-
-      addfrontier->next=frontier;
-      frontier->next=addfrontier;
-    }
+  void RoutingProtocolImpl::NTOHS_message(char* buffer, unsigned short size){
+    BufferConvHelper(buffer,size,true);
   }
-  minDistNode=NULL;
-  //find first minimum router to wait for.
-  findMinInFrontier();
-
-  allKnownNodes = new NODE_LS();
-  allKnownNodes->id=RouterID;
-  allKnownNodes->Distance=0;
-  allKnownNodes->next=NULL;
-
-  seqNumSelf=1;
-  neighbors=NULL;
-  flood_LS();
-
-}
-void RoutingProtocolImpl::findMinInFrontier(){
-  minDistNode->id=0;
-  minDistNode->Distance=INFINITY_COST;
-  for(NODE_LS *fcur=frontier;fcur!=NULL;fcur=fcur->next){
-    if(fcur->Distance<minDistNode->Distance){
-      minDistNode->id=fcur->id;
-      minDistNode->Distance=fcur->id;
-    }
+  void RoutingProtocolImpl::HTONS_message(char* buffer, unsigned short size){
+    BufferConvHelper(buffer,size,false);
   }
-}
-void RoutingProtocolImpl::flood_LS(){
-  unsigned short size = 12;
-
-  //Deletes all neighbors
-  NODE_LS *neighborNode = neighbors;
-  while(neighborNode->next!=NULL){
-    NODE_LS *delNode = neighborNode;
-    neighborNode=neighborNode->next;
-    free(delNode);
-  }
-  neighbors=NULL;
-
-  //adds all neighbors back from portStatus
-  for(PORT_STATUS *cur=portStatus;cur!=NULL;cur=cur->next){
-    if(cur->TxDelay!=INFINITY_COST){
-      size+=4;
-
-      NODE_LS *addNeighbor = new NODE_LS();
-      addNeighbor->id=cur->id;
-      addNeighbor->Distance=cur->TxDelay;
-      addNeighbor->next=neighbors;
-      neighbors=addNeighbor; 
-    }
-  }
-
-  //configures the payload for the flood message
-  char *sendPayload = (char*) malloc(size-12); 
-  NODE_LS *cur_neighbor = neighbors;
-  for(int i=0;i<(size-12);i+=4){
-    memcpy(&sendPayload[i],&(cur_neighbor->id),2);
-    memcpy(&sendPayload[i+2],&(cur_neighbor->Distance),2);
-  }
-  PktDetail *floodMsg = new PktDetail();
-  floodMsg->packet_type=LS;
-  floodMsg->src_id=RouterID;
-  floodMsg->dest_id=0;
-  floodMsg->size=size;
-  floodMsg->payload=sendPayload;
-  SendAllNeighbors(floodMsg);
-  free(floodMsg);
-
-  //increment seqNumSelf 
-  seqNumSelf+=1;
-}
-void RoutingProtocolImpl::send_data_LS(unsigned short port, PktDetail *pkt, char* buffer, unsigned short size){
-  for(ROUT_TBL_LS *rcur = routTblLS;rcur!=NULL;rcur=rcur->next){
-    if(rcur->Destination==pkt->dest_id){
-      sys->send(rcur->NextHop,buffer,size);
-      return;
-    }
-  }
-}
-void RoutingProtocolImpl::HndAlm_frd_LS(){
-  //changed it to flood regardless of if the neighbors change, flood anyways
-  flood_LS();
-  /*
-  //checks if the distance from its neighbors change
-  for(PORT_STATUS *PEntry=portStatus;PEntry!=NULL;PEntry=PEntry->next){
-    for(NODE_LS *NEntry=neighbors;NEntry!=NULL;NEntry=NEntry->next){
-      if(  (PEntry->id==NEntry->id) && (PEntry->TxDelay != NEntry->Distance)  ){
-        //if so, flood
-        flood_LS();
-      }
-
-    }
-  }*/
-}
-
-
-void RoutingProtocolImpl::updt_LS_RtTbl(unsigned short port, PktDetail *pkt, unsigned short size){
-  unsigned int SequenceNum = (unsigned int) (pkt->payload[0]);
-  bool isSeqNumGood=false;
-  for(ROUT_TBL_LS *REntry=routTblLS;REntry->next != NULL;REntry=REntry->next){
-    if(  (REntry->Destination==pkt->src_id) && (REntry->seqNum < SequenceNum)  ){
-      isSeqNumGood=true;
-    }
-  }
-  if(isSeqNumGood){
-    //if the sequenc number of this message is okay
-    addEntriesToLSRoutingTable(pkt);
-    if(pkt->src_id==minDistNode->id){
-      //if node is the minimum node
-      removeFromFrontier(minDistNode->id);
-      addToFrontier(pkt);
-      forwardPacket(pkt);
-    }
-  }
-}
-void RoutingProtocolImpl::addEntriesToLSRoutingTable(PktDetail *pkt){
-  if(pkt->src_id==minDistNode->id){
-    //if the packet came from the minimum node
-    unsigned short minID=0;
-    unsigned short minDistance=INFINITY_COST;
-   
-    for(int i=0;i<pkt->size-12;pkt->size+=4){
-      unsigned short id= (unsigned short)(pkt->payload[i]);
-      unsigned short distance= (unsigned short)(pkt->payload[i+2]);
-      unsigned short knownNodeDistance=0;
-      
-      //find min in the payload
-      if(distance<minDistance){
-        minID=id;
-        minDistance=distance;
-      }
-
-      bool inRoutTable=false;
- 
-      for(ROUT_TBL_LS *REntry=routTblLS;REntry->next != NULL;REntry=REntry->next){
-        if(REntry->Destination==id){
-          //this node already has an entry in the routing table
-          inRoutTable=true;
-          if(distance<REntry->Distance){
-            //i.e. this new path is better than the previous path.
-            REntry->Destination=id;
-            REntry->NextHop=findPortNumber(minDistNode->id);
-            REntry->Distance=knownNodeDistance+distance;
-            REntry->timestamp=sys->time();
-          }
-          else{
-            //refresh the timestamp;
-            REntry->timestamp=sys->time();
-          }
-        }
-      }
-      if(!inRoutTable){
-        //make a new routing entry for this node with the same port as the minimum node
-        ROUT_TBL_LS *addRout = new ROUT_TBL_LS();
-        addRout->Destination=id;  //destination id 
-        addRout->NextHop=findPortNumber(minDistNode->id);      //next hop id
-        addRout->Distance=knownNodeDistance+distance;
-        addRout->timestamp=sys->time();
-        addRout->next=routTblLS;
-
-        routTblLS=addRout;
-      }
-    }
-
-    //adds the min node in payload to the allKnownNodes
-    NODE_LS *addKnownNode = new NODE_LS();
-    addKnownNode->id=minID;
-    addKnownNode->Distance=minDistance;
-    addKnownNode->next=allKnownNodes;
-
-    allKnownNodes=addKnownNode;
-
-  }
-}
-void RoutingProtocolImpl::removeFromFrontier(unsigned short remove_id){
-  
-  for(NODE_LS *fcur=frontier;fcur!=NULL;){
-    if(fcur->id==remove_id){
-      if(fcur==frontier){
-        NODE_LS *delElm = fcur;
-        frontier=fcur->next;
-        fcur=fcur->next;
-        free(delElm);
-        return;
+  void RoutingProtocolImpl::BufferConvHelper(char* buffer, unsigned short size,bool isNTOHS){
+    char *newBuffer = (char*)malloc(size);
+    for(unsigned short i=2;i<size;i+=2){
+      unsigned short temp = (unsigned short)buffer[i];
+      if(isNTOHS){
+        temp=ntohs(temp);
       }
       else{
-
+        temp=htons(temp);
       }
+      memcpy(&newBuffer[i], &temp, 2);
     }
-    fcur=fcur->next;
+    char* freeMem = buffer;
+    buffer=newBuffer;
+    free(freeMem);
   }
-}
-void RoutingProtocolImpl::addToFrontier(PktDetail *pkt){
-  for(int i=0;i<pkt->size-12;pkt->size+=4){
-    unsigned short id= (unsigned short)(pkt->payload[i]);
-    unsigned short distance= (unsigned short)(pkt->payload[i+2]);
-    bool isKnownNode=false;
-    for(NODE_LS *knownNode = allKnownNodes;knownNode!=NULL;knownNode=knownNode->next){
-      if(id==(knownNode->id)){
-        //this node is a known node
-        isKnownNode=true;
-      }
-    }
-    if(!isKnownNode){
-      //add it to the frontier
-      NODE_LS *addfrontier=new NODE_LS();
-      addfrontier->id=id;
-      addfrontier->Distance=distance;
-      addfrontier->next=frontier;
-      frontier=addfrontier;
-    }
-  }
-}
-void RoutingProtocolImpl::forwardPacket(PktDetail *pkt){
-  for(PORT_STATUS *PEntry;PEntry!=NULL;PEntry=PEntry->next){
-    if(PEntry->id !=pkt->src_id){
-      SendMsg(pkt,PEntry->port_num);
-    }
-  }
-}
+  
+  
+  
 
                     //////////////////////////////////////
                     //                                  //
@@ -753,7 +512,7 @@ void RoutingProtocolImpl::forwardPacket(PktDetail *pkt){
                     //    ########           ##         //
                     //                                  // 
                     //////////////////////////////////////
-void RoutingProtocolImpl::InitRoutingTable_DV(){
+  void RoutingProtocolImpl::InitRoutingTable_DV(){
     routTblDV = new ROUT_TBL_DV();              //Init the first element
       
       ROUT_TBL_DV *cur = routTblDV;
@@ -884,3 +643,44 @@ void RoutingProtocolImpl::InitRoutingTable_DV(){
       }
     }
   }
+  
+  unsigned short RoutingProtocolImpl::findPortNumber(unsigned short neighborID){
+    for (PORT_STATUS *cur = portStatus;cur->next != NULL;cur=cur->next){
+        if(cur->id==neighborID){
+          return cur-> port_num;
+        }
+    }
+    return 0;
+  }
+  bool RoutingProtocolImpl::isNeighbor(unsigned short routID){
+    for (PORT_STATUS *cur = portStatus;cur->next != NULL;cur=cur->next){
+        if(cur->id==routID){
+          return true;
+        }
+    }
+    return false;
+  }
+
+  
+  
+  
+
+                      //////////////////////////////////////
+                    //                                  //
+                    //    ###               ####        //
+                    //    ###             ##    ##      //
+                    //    ###              ##           //
+                    //    ###                ##         //
+                    //    ###                  ##       //
+                    //    ########        ##    ##      //
+                    //    ########          ####        //
+                    //                                  // 
+                    //////////////////////////////////////
+void RoutingProtocolImpl::InitRoutingTable_LS(){}
+
+void RoutingProtocolImpl::send_data_LS(unsigned short port, PktDetail *pkt, char* buffer, unsigned short size){}
+void RoutingProtocolImpl::HndAlm_frd_LS(){}
+void RoutingProtocolImpl::HndAlm_FrdChk_LS();
+
+
+
