@@ -212,6 +212,7 @@ void RoutingProtocolImpl::HndAlm_PrtStat(unsigned short num_ports, unsigned shor
   }
   }
 void RoutingProtocolImpl::HndAlm_PrtChk(){
+	printf("handle port check starts\n");
   int currentTime = sys->time();
   int lateTime = 15000;
   if(portStatus!=NULL){
@@ -227,27 +228,38 @@ void RoutingProtocolImpl::HndAlm_PrtChk(){
 	  }
   }
   else{ return;}
+  printf("handle port check 1\n");
   PORT_STATUS *lag=portStatus;
   PORT_STATUS *cur=portStatus->next;
+  printf("handle port check 2\n");
   if(cur!=NULL){
     while(cur->next!=NULL){
+		printf("in while\n");
       if((currentTime-cur->timestamp)  >lateTime){
+		  printf("in if\n");
+		  printf("cur null? %d cur next null? %d  cur nextnext null?%d \n",cur==NULL,cur->next==NULL,cur->next->next==NULL);
         PORT_STATUS *delElm = cur;
         lag->next=cur->next;
-        cur=cur->next->next;
+		cur=cur->next->next;
         free(delElm);
+		if(cur==NULL){return;}
       }
       else{
+		  printf("in else\n");
         lag=cur;
         cur=cur->next;
       }
+	  printf("handle port check 4\n");
+	  
     }
+	printf("handle port check 3\n");
     if((currentTime-cur->timestamp)  >lateTime){
       //special case for the last element
       lag->next=cur->next;
       free(cur);
     }
   }
+  printf("handle port check ends\n");
   
   /*//printf("Handle alarm port check \n");
     int currentTime = sys->time();
