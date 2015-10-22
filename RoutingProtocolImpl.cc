@@ -212,7 +212,36 @@ void RoutingProtocolImpl::HndAlm_PrtStat(unsigned short num_ports, unsigned shor
   }
   }
 void RoutingProtocolImpl::HndAlm_PrtChk(){
-  //printf("Handle alarm port check \n");
+  int currentTime = sys->time();
+  int lateTime = 15000;
+  while((currentTime-portStatus->timestamp)  >lateTime){
+    PORT_STATUS *delElm = portStatus;
+    portStatus=portStatus->next;
+    free(delElm);
+  }
+  PORT_STATUS *lag=portStatus;
+  PORT_STATUS *cur=portStatus->next;
+  if(cur!=NULL){
+    while(cur->next!=NULL){
+      if((currentTime-cur->timestamp)  >lateTime){
+        PORT_STATUS *delElm = cur;
+        lag->next=cur->next;
+        cur=cur->next->next;
+        free(delElm);
+      }
+      else{
+        lag=cur;
+        cur=cur->next;
+      }
+    }
+    if((currentTime-cur->timestamp)  >lateTime){
+      //special case for the last element
+      lag->next=cur->next;
+      free(cur);
+    }
+  }
+  
+  /*//printf("Handle alarm port check \n");
     int currentTime = sys->time();
     //int currentTime = 1000;
     int lateTime = 15000;
@@ -230,7 +259,7 @@ void RoutingProtocolImpl::HndAlm_PrtChk(){
           free(deleteElt);
         }
       }
-    }    
+    }    */
   }
 
 
@@ -445,38 +474,66 @@ void RoutingProtocolImpl::HndAlm_FrdChk(){
 void RoutingProtocolImpl::HndAlm_FrdChk_DV(){
   int currentTime = sys->time();
   int lateTime = 30000;
-  for(ROUT_TBL_DV *cur=routTblDV;cur->next != NULL;cur=cur->next){
-    if(  (currentTime-cur->timestamp)  >lateTime){
-      if(cur==routTblDV){            //ie the current first element 
-        ROUT_TBL_DV *deleteElt=routTblDV;
-        routTblDV=routTblDV->next;
-        free(deleteElt);
+  
+  while((currentTime-routTblDV->timestamp)  >lateTime){
+    ROUT_TBL_DV *delElm = routTblDV;
+    routTblDV=routTblDV->next;
+    free(delElm);
+  }
+  ROUT_TBL_DV *lag=routTblDV;
+  ROUT_TBL_DV *cur=routTblDV->next;
+  if(cur!=NULL){
+    while(cur->next!=NULL){
+      if((currentTime-cur->timestamp)  >lateTime){
+        ROUT_TBL_DV *delElm = cur;
+        lag->next=cur->next;
+        cur=cur->next->next;
+        free(delElm);
       }
-      else{                           //the element is not first
-        ROUT_TBL_DV *deleteElt=cur;
+      else{
+        lag=cur;
         cur=cur->next;
-        free(deleteElt);
       }
     }
-  }    
+    if((currentTime-cur->timestamp)  >lateTime){
+      //special case for the last element
+      lag->next=cur->next;
+      free(cur);
+    }
+  }
+  
 }
 void RoutingProtocolImpl::HndAlm_FrdChk_LS(){
   int currentTime = sys->time();
   int lateTime = 30000;
-  for(ROUT_TBL_LS *cur=routTblLS;cur->next != NULL;cur=cur->next){
-    if(  (currentTime-cur->timestamp)  >lateTime){
-      if(cur==routTblLS){            //ie the current first element 
-        ROUT_TBL_LS *deleteElt=routTblLS;
-        routTblLS=routTblLS->next;
-        free(deleteElt);
+  
+  while((currentTime-routTblLS->timestamp)  >lateTime){
+    ROUT_TBL_LS *delElm = routTblLS;
+    routTblLS=routTblLS->next;
+    free(delElm);
+  }
+  ROUT_TBL_LS *lag=routTblLS;
+  ROUT_TBL_LS *cur=routTblLS->next;
+  if(cur!=NULL){
+    while(cur->next!=NULL){
+      if((currentTime-cur->timestamp)  >lateTime){
+        ROUT_TBL_LS *delElm = cur;
+        lag->next=cur->next;
+        cur=cur->next->next;
+        free(delElm);
       }
-      else{                           //the element is not first
-        ROUT_TBL_LS *deleteElt=cur;
+      else{
+        lag=cur;
         cur=cur->next;
-        free(deleteElt);
       }
     }
-  }  
+    if((currentTime-cur->timestamp)  >lateTime){
+      //special case for the last element
+      lag->next=cur->next;
+      free(cur);
+    } 
+  }
+  
 }
 
 
