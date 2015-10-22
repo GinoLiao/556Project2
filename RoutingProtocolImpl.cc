@@ -61,31 +61,31 @@ void RoutingProtocolImpl::handle_alarm(void *data) {
   //printf("handle alarm starts\n");
   //printf("handle type %d \n",convertedData);
     if(convertedData==ALARM_PORT_STATUS){
-    //printf("handle port status alarm.\n");
+		//printf("handle port status alarm.\n");
         HndAlm_PrtStat(NumPorts, RouterID); 
-    static eAlarmType port_status_alrm_type = ALARM_PORT_STATUS;
-    (void) port_status_alrm_type;
-    //printf("setting port update alarm. router: %d\n", RouterID);
-    sys->set_alarm(this, 10000, &port_status_alrm_type);
+		static eAlarmType port_status_alrm_type = ALARM_PORT_STATUS;
+		(void) port_status_alrm_type;
+		//printf("setting port update alarm. router: %d\n", RouterID);
+		sys->set_alarm(this, 10000, &port_status_alrm_type);
     }
     else if(convertedData == ALARM_FORWARDING){
         HndAlm_frd(); 
-    static eAlarmType alrm_frd = ALARM_FORWARDING;
-    (void) alrm_frd;
-    sys->set_alarm(this,30000,&alrm_frd);
+		static eAlarmType alrm_frd = ALARM_FORWARDING;
+		(void) alrm_frd;
+		sys->set_alarm(this,30000,&alrm_frd);
     }
     else if(convertedData == ALARM_PORT_CHECK){
-    //printf("handle port check alarm.\n");
-    HndAlm_PrtChk();
-    static eAlarmType port_check_alrm_type = ALARM_PORT_CHECK;
-    (void) port_check_alrm_type;
-    sys->set_alarm(this, 1000, &port_check_alrm_type);
+		//printf("handle port check alarm.\n");
+		HndAlm_PrtChk();
+		static eAlarmType port_check_alrm_type = ALARM_PORT_CHECK;
+		(void) port_check_alrm_type;
+		sys->set_alarm(this, 1000, &port_check_alrm_type);
     }  
     else if(convertedData == ALARM_FORWARD_CHECK){
         HndAlm_FrdChk();
-    static eAlarmType alrm_frd_chk = ALARM_FORWARD_CHECK;
-    (void) alrm_frd_chk;
-    sys->set_alarm(this, 1000, &alrm_frd_chk);
+		static eAlarmType alrm_frd_chk = ALARM_FORWARD_CHECK;
+		(void) alrm_frd_chk;
+		sys->set_alarm(this, 1000, &alrm_frd_chk);
     }  
     else{
         //printf("This alarm type cannot be handled! \n");
@@ -106,11 +106,11 @@ void RoutingProtocolImpl::recv(unsigned short port, void *packet, unsigned short
   // memcpy(&pktType,&buffer[0],1);
   // printf("\n packet type in recv: %d \n", *(int *)pktType);
   
-  // printf("packet type in recv: %d \n", pkt->packet_type);
-  // printf("size in recv: %d \n", size);
-  // printf("src id in recv: %d \n", pkt->src_id);
-  // printf("dest id in recv: %d \n", pkt->dest_id);
-  // printf("payload in recv: %d \n", *(int *)&pkt->payload);
+  //printf("packet type in recv: %d \n", pkt->packet_type);
+  //printf("size in recv: %d \n", size);
+  //printf("src id in recv: %d \n", pkt->src_id);
+  //printf("dest id in recv: %d \n", pkt->dest_id);
+  //printf("payload in recv: %d \n", *(int *)&pkt->payload);
   if(pkt->packet_type == DATA) {
          send_data(port, pkt,(char*)packet, size);
   }
@@ -214,11 +214,19 @@ void RoutingProtocolImpl::HndAlm_PrtStat(unsigned short num_ports, unsigned shor
 void RoutingProtocolImpl::HndAlm_PrtChk(){
   int currentTime = sys->time();
   int lateTime = 15000;
-  while((currentTime-portStatus->timestamp)  >lateTime){
-    PORT_STATUS *delElm = portStatus;
-    portStatus=portStatus->next;
-    free(delElm);
+  if(portStatus!=NULL){
+	  while((currentTime-portStatus->timestamp)  >lateTime){
+		PORT_STATUS *delElm = portStatus;
+		portStatus=portStatus->next;
+		free(delElm);
+		if(portStatus==NULL){
+			portStatus = new PORT_STATUS();
+			portStatus->TxDelay = INFINITY_COST;
+			return;
+		}
+	  }
   }
+  else{ return;}
   PORT_STATUS *lag=portStatus;
   PORT_STATUS *cur=portStatus->next;
   if(cur!=NULL){
@@ -290,12 +298,12 @@ void RoutingProtocolImpl::update_port_status(unsigned short port, PktDetail *pkt
   //printf("dest id %d \n",destID);
     bool foundport = false;
     unsigned int timeDifference = (sys->time())  -  *(unsigned int*)&pkt->payload;
-  //printf("systime %d  pkttime  %d   delay %d \n",sys->time(),*(unsigned int*)&pkt->payload,timeDifference);
+  printf("systime %d  pkttime  %d   delay %d \n",sys->time(),*(unsigned int*)&pkt->payload,timeDifference);
   
     for (PORT_STATUS *cur = portStatus;cur->next != NULL;cur=cur->next){
-      //printf("port num %d, port %d \n", cur->port_num, port);
+      printf("port num %d, port %d \n", cur->port_num, port);
             if(cur->port_num==port){
-        //printf("found port\n");
+        printf("found port\n");
               cur->timestamp=sys->time();
               cur->id=destID;
               cur->TxDelay=timeDifference;
@@ -437,7 +445,7 @@ void RoutingProtocolImpl::get_pkt_detail(void *pkt, PktDetail *pkt_d, unsigned s
 
 void RoutingProtocolImpl::InitRoutingTable(){
   if (ProtocolType==P_DV){                      //Protocol for DV
-    //InitRoutingTable_DV();
+    InitRoutingTable_DV();
   }
   else{
     //InitRoutingTable_LS();
@@ -446,7 +454,7 @@ void RoutingProtocolImpl::InitRoutingTable(){
 
 void RoutingProtocolImpl::send_data(unsigned short port, PktDetail *pkt, char* buffer, unsigned short size){
   if (ProtocolType==P_DV){                      //Protocol for DV
-    //send_data_DV(port,pkt,buffer,size);
+    send_data_DV(port,pkt,buffer,size);
   }
   else{
     //send_data_LS(port,pkt,buffer,size);
@@ -455,7 +463,7 @@ void RoutingProtocolImpl::send_data(unsigned short port, PktDetail *pkt, char* b
 
 void RoutingProtocolImpl::HndAlm_frd(){
   if (ProtocolType==P_DV){                      //Protocol for DV
-    //HndAlm_frd_DV();
+    HndAlm_frd_DV();
   }
   else{
     //HndAlm_frd_LS();
@@ -464,7 +472,9 @@ void RoutingProtocolImpl::HndAlm_frd(){
 
 void RoutingProtocolImpl::HndAlm_FrdChk(){
   if (ProtocolType==P_DV){                      //Protocol for DV
-    //HndAlm_FrdChk_DV();
+	printf("handle fwd chk\n");
+    HndAlm_FrdChk_DV();
+	printf("handle fwd chk done\n");
   }
   else{
     //HndAlm_FrdChk_LS();
@@ -474,12 +484,22 @@ void RoutingProtocolImpl::HndAlm_FrdChk(){
 void RoutingProtocolImpl::HndAlm_FrdChk_DV(){
   int currentTime = sys->time();
   int lateTime = 30000;
-  
-  while((currentTime-routTblDV->timestamp)  >lateTime){
-    ROUT_TBL_DV *delElm = routTblDV;
-    routTblDV=routTblDV->next;
-    free(delElm);
+  if(routTblDV!=NULL){
+	  while((currentTime-routTblDV->timestamp)  >lateTime){
+		printf("cur time: %d, timstmp: %d \n",currentTime, routTblDV->timestamp);  
+		ROUT_TBL_DV *delElm = routTblDV;
+		routTblDV=routTblDV->next;
+		free(delElm);
+		if(routTblDV==NULL){
+			return;
+		}
+		printf("is null? %d \n",routTblDV==NULL);
+		printf("delete first ends\n");
+		
+	  }
   }
+  else{ return;}
+  printf("delete first few\n");
   ROUT_TBL_DV *lag=routTblDV;
   ROUT_TBL_DV *cur=routTblDV->next;
   if(cur!=NULL){
@@ -506,12 +526,17 @@ void RoutingProtocolImpl::HndAlm_FrdChk_DV(){
 void RoutingProtocolImpl::HndAlm_FrdChk_LS(){
   int currentTime = sys->time();
   int lateTime = 30000;
-  
-  while((currentTime-routTblLS->timestamp)  >lateTime){
-    ROUT_TBL_LS *delElm = routTblLS;
-    routTblLS=routTblLS->next;
-    free(delElm);
+  if(routTblLS!=NULL){
+	  while((currentTime-routTblLS->timestamp)  >lateTime){
+		ROUT_TBL_LS *delElm = routTblLS;
+		routTblLS=routTblLS->next;
+		free(delElm);
+		if(routTblLS==NULL){
+			return ;
+		}
+	  }
   }
+  else{ return;}
   ROUT_TBL_LS *lag=routTblLS;
   ROUT_TBL_LS *cur=routTblLS->next;
   if(cur!=NULL){
